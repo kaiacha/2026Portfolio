@@ -1,0 +1,12 @@
+# Build outputs
+out/
+.next/
+dist/
+build/
+
+# Dependencies
+node_modules/
+
+# Cache
+.cache/
+

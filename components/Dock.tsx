@@ -104,7 +104,7 @@ export default function Dock({
 
             let iconContent: React.ReactNode
             if (item.id === 'home') {
-              iconContent = <Image src={homeIcon} alt="Home" width={35} height={30} className="w-[28px] h-[24px] sm:w-[32px] sm:h-[27px] md:w-[35px] md:h-[30px]" priority />
+              iconContent = <Image src={homeIcon} alt="Home" width={35} height={30} className=" h-[24px] sm: sm:h-[27px]  md:h-[30px]" priority />
             } else if (item.id === 'profile') {
               iconContent = (
                 <Image src={profileIcon} alt="Profile" fill className="object-contain rounded-[16px]" priority />
@@ -115,12 +115,12 @@ export default function Dock({
               )
             } else if (item.id === 'volunteering') {
               iconContent = (
-                <Image src={compassIcon} alt="Volunteering" width={35} height={30} className="w-[28px] h-[24px] sm:w-[32px] sm:h-[27px] md:w-[35px] md:h-[30px]" priority />
+                <Image src={compassIcon} alt="Volunteering" width={35} height={30} className="w-[28px] sm:w-[32px] ] md:w-[35px]" priority />
               )
             } else if (item.id === 'linkedin') {
-              iconContent = <Image src={linkedinIcon} alt="LinkedIn" width={35} height={30} className="w-[28px] h-[24px] sm:w-[32px] sm:h-[27px] md:w-[35px] md:h-[30px]" priority />
+              iconContent = <Image src={linkedinIcon} alt="LinkedIn" width={35} height={30} className="w-[28px] sm:w-[32px] ] md:w-[35px]" priority />
             } else if (item.id === 'mail') {
-              iconContent = <Image src={mailIcon} alt="Mail" width={35} height={30} className="w-[28px] h-[24px] sm:w-[32px] sm:h-[27px] md:w-[35px] md:h-[30px]" priority />
+              iconContent = <Image src={mailIcon} alt="Mail" width={35} height={30} className="w-[28px] sm:w-[32px] ] md:w-[35px]" priority />
             } else {
               iconContent = <span className="text-xl sm:text-2xl">{item.icon}</span>
             }

@@ -1,0 +1,24 @@
+{
+  "files.exclude": {
+    "**/.next": true,
+    "**/out": true,
+    "**/node_modules": true
+  },
+  "files.watcherExclude": {
+    "**/.next/**": true,
+    "**/out/**": true,
+    "**/node_modules/**": true
+  },
+  "search.exclude": {
+    "**/.next": true,
+    "**/out": true,
+    "**/node_modules": true
+  },
+  "typescript.preferences.excludePackageJson": true,
+  "javascript.validate.enable": true,
+  "typescript.validate.enable": true,
+  "[html]": {
+    "editor.defaultFormatter": null
+  }
+}
+
