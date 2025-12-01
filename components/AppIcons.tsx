@@ -16,6 +16,7 @@ interface AppIcon {
   }
   background: React.CSSProperties
   href: string
+  disabled?: boolean
 }
 
 const apps: AppIcon[] = [
@@ -42,6 +43,7 @@ const apps: AppIcon[] = [
       background: '#26427A',
     },
     href: '/unius',
+    disabled: true,
   },
   {
     name: 'EGG',
@@ -50,27 +52,52 @@ const apps: AppIcon[] = [
       background: 'rgba(0, 255, 34, 0.3)',
     },
     href: '/egg',
+    disabled: true,
   },
 ]
 
 export default function AppIcons() {
   return (
     <div className="grid w-full grid-cols-4 gap-3 px-4 sm:px-6 md:flex md:justify-around md:gap-6 md:px-0">
-      {apps.map((app, index) => (
-        <Link
-          key={index}
-          href={app.href}
-          className="flex flex-col items-center gap-1.5 cursor-pointer hover:scale-105 transition-transform"
-        >
-          <div
-            className="w-14 h-14 rounded-xl backdrop-blur-[2px] flex items-center justify-center shadow-lg overflow-hidden"
-            style={app.background}
+      {apps.map((app, index) => {
+        const content = (
+          <>
+            <div
+              className={`w-14 h-14 rounded-xl backdrop-blur-[2px] flex items-center justify-center shadow-lg overflow-hidden ${
+                app.disabled ? 'opacity-50' : ''
+              }`}
+              style={app.background}
+            >
+              <Image src={app.image.src} alt={app.image.alt} height={35} priority />
+            </div>
+            <span className={`text-xs font-medium text-center ${app.disabled ? 'text-white/50' : 'text-white/80'}`}>
+              {app.name}
+            </span>
+          </>
+        )
+
+        if (app.disabled) {
+          return (
+            <div
+              key={index}
+              className="flex flex-col items-center gap-1.5 cursor-not-allowed"
+              title="Coming soon"
+            >
+              {content}
+            </div>
+          )
+        }
+
+        return (
+          <Link
+            key={index}
+            href={app.href}
+            className="flex flex-col items-center gap-1.5 cursor-pointer hover:scale-105 transition-transform"
           >
-            <Image src={app.image.src} alt={app.image.alt}  height={35} priority />
-          </div>
-          <span className="text-xs text-white/80 font-medium text-center">{app.name}</span>
-        </Link>
-      ))}
+            {content}
+          </Link>
+        )
+      })}
     </div>
   )
 }

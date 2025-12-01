@@ -18,6 +18,7 @@ const projects = [
     },
     badge: '67',
     href: '/anticancer',
+    disabled: false,
   },
   {
     id: 2,
@@ -28,6 +29,7 @@ const projects = [
     },
     badge: '67',
     href: '/koddiz',
+    disabled: false,
   },
   {
     id: 3,
@@ -38,6 +40,7 @@ const projects = [
     },
     badge: '67',
     href: '/unius',
+    disabled: true,
   },
   {
     id: 4,
@@ -48,6 +51,7 @@ const projects = [
     },
     badge: '67',
     href: '/egg',
+    disabled: true,
   },
 ]
 
@@ -55,11 +59,24 @@ export default function ProjectsContent() {
   return (
     <div className="px-6 py-10 w-full">
       <div className="flex items-center justify-between gap-4 md:justify-center md:gap-14 lg:gap-20">
-        {projects.map((project) => (
-          <Link key={project.id} href={project.href} className="inline-flex flex-col items-center gap-2">
-            <ProjectAppIcon {...project} />
-          </Link>
-        ))}
+        {projects.map((project) => {
+          if (project.disabled) {
+            return (
+              <div
+                key={project.id}
+                className="inline-flex flex-col items-center gap-2 cursor-not-allowed opacity-50"
+                title="Coming soon"
+              >
+                <ProjectAppIcon {...project} />
+              </div>
+            )
+          }
+          return (
+            <Link key={project.id} href={project.href} className="inline-flex flex-col items-center gap-2">
+              <ProjectAppIcon {...project} />
+            </Link>
+          )
+        })}
       </div>
     </div>
   )
