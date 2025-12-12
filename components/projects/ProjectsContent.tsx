@@ -5,12 +5,27 @@ import Link from 'next/link'
 import ProjectAppIcon from './ProjectAppIcon'
 import anticancerIcon from '@/src/icons/Anticancer.png'
 import koddizIcon from '@/src/icons/Koddiz.png'
-import uniusIcon from '@/src/icons/Unius.png'
+import lifelineIcon from '@/src/icons/LifeLine.png'
 import eggIcon from '@/src/icons/Egg.png'
 
 const projects = [
   {
     id: 1,
+    name: 'LifeLine',
+    image: { src: lifelineIcon, alt: 'LifeLine app icon' },
+    background: {
+      backgroundColor: '#cacaca',
+    },
+    badge: '67',
+    href: '/LifeLine',
+    disabled: false,
+    iconSize: {
+      width: 50,
+      height: 50,
+    },
+  },
+  {
+    id: 2,
     name: 'Anticancer',
     image: { src: anticancerIcon, alt: 'Anticancer app icon' },
     background: {
@@ -21,7 +36,7 @@ const projects = [
     disabled: false,
   },
   {
-    id: 2,
+    id: 3,
     name: 'Koddiz',
     image: { src: koddizIcon, alt: 'Koddiz app icon' },
     background: {
@@ -30,17 +45,6 @@ const projects = [
     badge: '67',
     href: '/koddiz',
     disabled: false,
-  },
-  {
-    id: 3,
-    name: 'Unius',
-    image: { src: uniusIcon, alt: 'Unius app icon' },
-    background: {
-      backgroundColor: '#26427A',
-    },
-    badge: '67',
-    href: '/unius',
-    disabled: true,
   },
   {
     id: 4,
@@ -67,13 +71,13 @@ export default function ProjectsContent() {
                 className="inline-flex flex-col items-center gap-2 cursor-not-allowed opacity-50"
                 title="Coming soon"
               >
-                <ProjectAppIcon {...project} />
+                <ProjectAppIcon {...project} iconSize={project.iconSize} />
               </div>
             )
           }
           return (
             <Link key={project.id} href={project.href} className="inline-flex flex-col items-center gap-2">
-              <ProjectAppIcon {...project} />
+              <ProjectAppIcon {...project} iconSize={project.iconSize} />
             </Link>
           )
         })}

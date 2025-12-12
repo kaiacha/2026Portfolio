@@ -1,0 +1,727 @@
+.pilotRightPanel {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+  .pilotRightPanel {
+    width: 220px;
+    gap: 8px;
+    padding: 8px;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .pilotRightPanel {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    gap: 6px;
+    padding: 6px;
+    order: 4;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .pilotRightPanel {
+    gap: 4px;
+    padding: 4px;
+  }
+}
+
+.sectionTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.1px;
+  margin: 0;
+  text-shadow: 0px 0px 4px #000000;
+}
+
+/* Route Selection Section */
+.routeSelection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activeBadge {
+  background-color: #252832;
+  border: 1px solid #2a2e3a;
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 8px;
+  font-weight: 500;
+  color: #858895;
+}
+
+.routesList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.routeCard {
+  background-color: #252832;
+  border: 1px solid #2a2e3a;
+  border-radius: 8px;
+  padding: 10px;
+  opacity: 0.8;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.routeCardActive {
+  background-color: #252832;
+  border: 2px solid #bce1ff;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.routeCardActiveSafest {
+  background-color: #252832;
+  border: 2px solid #55ffd4;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.routeCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.routeCardLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.routeIcon {
+  width: 28px;
+  height: 28px;
+  background-color: #2a2e3a;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.routeIconActive {
+  width: 28px;
+  height: 28px;
+  background-color: #bce1ff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.routeIconActiveSafest {
+  width: 28px;
+  height: 28px;
+  background-color: #55ffd4;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.routeInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.routeNumber {
+  font-size: 12px;
+  font-weight: 700;
+  color: #bce1ff;
+  letter-spacing: -0.3px;
+  line-height: 16px;
+}
+
+.routeDescription {
+  font-size: 8px;
+  color: #bce1ff;
+  line-height: 12px;
+}
+
+.routeNumberInactive {
+  font-size: 12px;
+  font-weight: 700;
+  color: #d0d4da;
+  letter-spacing: -0.3px;
+  line-height: 16px;
+}
+
+.routeDescriptionInactive {
+  font-size: 8px;
+  color: #ffffff;
+  line-height: 12px;
+}
+
+.routeNumberSafest {
+  font-size: 12px;
+  font-weight: 700;
+  color: #55ffd4;
+  letter-spacing: -0.3px;
+  line-height: 16px;
+}
+
+.routeDescriptionSafest {
+  font-size: 8px;
+  color: #55ffd4;
+  line-height: 12px;
+}
+
+.routeArrow {
+  font-size: 14px;
+  color: #bce1ff;
+}
+
+.routeArrowInactive {
+  font-size: 14px;
+  color: #858895;
+}
+
+.routeArrowSafest {
+  font-size: 14px;
+  color: #55ffd4;
+}
+
+.routeCardDivider {
+  border-top: 1px solid #bce1ff;
+}
+
+.routeCardDividerInactive {
+  border-top: 1px solid #2a2e3a;
+}
+
+.routeCardDividerSafest {
+  border-top: 1px solid #55ffd4;
+}
+
+.routeCardDetails {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8px;
+  color: #bce1ff;
+}
+
+.routeCardDetailsInactive {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8px;
+  color: #ffffff;
+}
+
+.routeCardDetailsSafest {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8px;
+  color: #55ffd4;
+}
+
+.routeCardValue {
+  font-size: 10px;
+  font-weight: 500;
+  color: #bce1ff;
+}
+
+.routeCardValueInactive {
+  font-size: 10px;
+  font-weight: 500;
+  color: #d0d4da;
+}
+
+.routeCardValueSafest {
+  font-size: 10px;
+  font-weight: 500;
+  color: #55ffd4;
+}
+
+/* Flight Mode Section */
+.flightMode {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.modeToggle {
+  background-color: #252832;
+  border: 1px solid #2a2e3a;
+  border-radius: 20px;
+  height: 17px;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+}
+
+.modeButton {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #858895;
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 20px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.modeButton:hover {
+  color: #bce1ff;
+}
+
+.modeButtonActive {
+  position: absolute;
+  top: 1px;
+  background: linear-gradient(to bottom, #3aa6ff, #5ab4ff);
+  border: 1px solid #3aa6ff;
+  border-radius: 20px;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  height: 15px;
+  width: calc(50% - 2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2;
+  box-shadow: 0px 2px 8px rgba(58, 166, 255, 0.3);
+  animation: modeButtonPulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes modeButtonPulse {
+  0%, 100% {
+    box-shadow: 0px 2px 8px rgba(58, 166, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0px 2px 12px rgba(58, 166, 255, 0.5);
+  }
+}
+
+/* Autopilot Status Section */
+.autopilotStatus {
+  background-color: #252832;
+  border: 1px solid #2a2e3a;
+  border-radius: 10px;
+  padding: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.autopilotHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.autopilotIcon {
+  font-size: 14px;
+}
+
+.autopilotTitle {
+  font-size: 8px;
+  font-weight: 500;
+  color: #858895;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.autopilotList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.autopilotItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+}
+
+.autopilotLabel {
+  color: #858895;
+}
+
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.statusDotActive {
+  width: 6px;
+  height: 6px;
+  background-color: #41bd75;
+  border-radius: 50%;
+}
+
+.statusTextActive {
+  color: #41bd75;
+  font-size: 9px;
+}
+
+/* System Health Section */
+.systemHealth {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.systemHealthHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nominalBadge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: rgba(65, 189, 117, 0.1);
+  border: 1px solid rgba(65, 189, 117, 0.2);
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+.nominalDot {
+  width: 6px;
+  height: 6px;
+  background-color: #41bd75;
+  border-radius: 50%;
+  opacity: 0.737;
+}
+
+.nominalBadge span {
+  font-size: 8px;
+  font-weight: 500;
+  color: #41bd75;
+  letter-spacing: 0.2px;
+}
+
+.systemHealthCard {
+  background-color: #252832;
+  border: 1px solid #2a2e3a;
+  border-radius: 10px;
+  padding: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.systemMetric {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.metricIcon {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(58, 166, 255, 0.1);
+  border: 1px solid rgba(58, 166, 255, 0.2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.metricInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metricLabel {
+  font-size: 8px;
+  font-weight: 500;
+  color: #858895;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.metricValue {
+  font-size: 10px;
+  font-weight: 500;
+  color: #3aa6ff;
+}
+
+.metricValueGreen {
+  font-size: 10px;
+  font-weight: 500;
+  color: #41bd75;
+}
+
+.metricMax {
+  font-size: 8px;
+  color: #858895;
+}
+
+/* Payload Details Section */
+.payloadDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+}
+
+.payloadHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payloadHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.payloadIcon {
+  font-size: 15px;
+}
+
+.secureBadge {
+  background-color: rgba(58, 166, 255, 0.1);
+  border: 1px solid rgba(58, 166, 255, 0.2);
+  border-radius: 4px;
+  padding: 3px 5px;
+  font-size: 8px;
+  font-weight: 500;
+  color: #3aa6ff;
+  letter-spacing: 0.2px;
+}
+
+.payloadCard {
+  background-color: #252832;
+  border: 1px solid #2a2e3a;
+  border-radius: 10px;
+  padding: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.payloadSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.payloadSection:not(:last-child) {
+  border-bottom: 1px solid #2a2e3a;
+  padding-bottom: 9px;
+}
+
+.payloadSectionTitle {
+  font-size: 8px;
+  font-weight: 500;
+  color: #858895;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.payloadInfoList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.payloadInfoItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  color: #858895;
+}
+
+.payloadInfoValue {
+  color: #bce1ff;
+}
+
+.priorityIndicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.priorityIcon {
+  width: 10px;
+  height: 10px;
+  color: #ffa44a;
+}
+
+.priorityValue {
+  color: #ffa44a;
+  font-size: 9px;
+}
+
+.contentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contentItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  color: #d0d4da;
+}
+
+.contentCheck {
+  width: 10px;
+  height: 10px;
+  color: #41bd75;
+  flex-shrink: 0;
+}
+
+.deliveryStatusRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  color: #858895;
+  margin-bottom: 4px;
+}
+
+.deliveryStatusValue {
+  color: #3aa6ff;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.progressBarContainer {
+  background-color: #1a1d26;
+  border: 1px solid #2a2e3a;
+  border-radius: 10000px;
+  height: 6px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  background: linear-gradient(to bottom, #3aa6ff, #2a8fe5);
+  height: 6px;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: progressBarPulse 2s ease-in-out infinite;
+}
+
+@keyframes progressBarPulse {
+  0%, 100% {
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0px 10px 20px -3px rgba(58, 166, 255, 0.3);
+  }
+}
+
+.confirmButton {
+  height: 42px;
+  background: linear-gradient(to bottom, #3aa6ff, #2a8fe5);
+  border: none;
+  border-radius: 12px;
+  padding: 10px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px -4px rgba(58, 166, 255, 0.5);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  animation: confirmButtonPulse 2s ease-in-out infinite;
+}
+
+.confirmButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  animation: none;
+}
+
+@keyframes confirmButtonPulse {
+  0%, 100% {
+    box-shadow: 0px 4px 6px -4px rgba(58, 166, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0px 4px 12px -4px rgba(58, 166, 255, 0.7);
+  }
+}
+
+.confirmIcon {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.confirmButton span {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.confirmButton:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.confirmButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+

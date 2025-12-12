@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import anticancerIcon from '@/src/icons/Anticancer.png'
 import koddizIcon from '@/src/icons/Koddiz.png'
-import uniusIcon from '@/src/icons/Unius.png'
+import lifelineIcon from '@/src/icons/LifeLine.png'
 import eggIcon from '@/src/icons/Egg.png'
 
 interface AppIcon {
@@ -17,9 +17,25 @@ interface AppIcon {
   background: React.CSSProperties
   href: string
   disabled?: boolean
+  iconSize?: {
+    width: number
+    height: number
+  }
 }
 
 const apps: AppIcon[] = [
+  {
+    name: 'LifeLine',
+    image: { src: lifelineIcon, alt: 'LifeLine app icon' },
+    background: {
+      background: '#cacaca ',
+    },
+    href: '/LifeLine',
+    iconSize: {
+      width: 50,
+      height: 50,
+    },
+  },
   {
     name: 'Anticancer',
     image: { src: anticancerIcon, alt: 'Anticancer app icon' },
@@ -36,15 +52,7 @@ const apps: AppIcon[] = [
     },
     href: '/koddiz',
   },
-  {
-    name: 'Unius',
-    image: { src: uniusIcon, alt: 'Unius app icon' },
-    background: {
-      background: '#26427A',
-    },
-    href: '/unius',
-    disabled: true,
-  },
+
   {
     name: 'EGG',
     image: { src: eggIcon, alt: 'EGG app icon' },
@@ -68,7 +76,13 @@ export default function AppIcons() {
               }`}
               style={app.background}
             >
-              <Image src={app.image.src} alt={app.image.alt} height={35} priority />
+              <Image
+                src={app.image.src}
+                alt={app.image.alt}
+                width={app.iconSize?.width || 35}
+                height={app.iconSize?.height || 35}
+                priority
+              />
             </div>
             <span className={`text-xs font-medium text-center ${app.disabled ? 'text-white/50' : 'text-white/80'}`}>
               {app.name}

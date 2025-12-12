@@ -1,0 +1,162 @@
+.roleSelector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  position: relative;
+  background-color: #0e1117;
+  padding-top: 8px;
+  flex-shrink: 0;
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+  .roleSelector {
+    gap: 8px;
+    padding-top: 6px;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .roleSelector {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 6px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .roleSelector {
+    gap: 6px;
+    padding: 4px;
+  }
+}
+
+.roleButtons {
+  display: flex;
+  gap: 12px;
+  padding: 0 10px;
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+  .roleButtons {
+    gap: 10px;
+    padding: 0 8px;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .roleButtons {
+    width: 100%;
+    justify-content: center;
+    gap: 8px;
+    padding: 0;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .roleButtons {
+    gap: 6px;
+  }
+}
+
+.roleButton {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 0 0 8px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .roleButton {
+    padding: 8px 12px;
+    border-radius: 8px;
+    min-height: 44px;
+  }
+}
+
+.roleButtonActive {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 0 0 8px 0;
+  background: none;
+  border: none;
+  border-bottom: 4px solid #3aa6ff;
+  cursor: pointer;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .roleButtonActive {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border-bottom: none;
+    background-color: rgba(58, 166, 255, 0.1);
+    border: 2px solid #3aa6ff;
+    min-height: 44px;
+  }
+}
+
+.roleIcon {
+  width: 36px;
+  height: 36px;
+  background-color: #2a2e3a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.roleIconActive {
+  width: 36px;
+  height: 36px;
+  background-color: #3aa6ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.roleInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.roleTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #d0d4da;
+  letter-spacing: -0.4px;
+  line-height: 24px;
+}
+
+.roleTitleActive {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3aa6ff;
+  letter-spacing: -0.4px;
+  line-height: 24px;
+}
+
+.roleSubtitle {
+  font-size: 10px;
+  font-weight: 400;
+  color: #858895;
+  line-height: 15px;
+}
+

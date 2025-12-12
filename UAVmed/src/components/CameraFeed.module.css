@@ -1,0 +1,337 @@
+.cameraFeedContainer {
+  background-color: #0e1117;
+  border: 1px solid #2a2e3a;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 20px 25px -5px rgba(0, 0, 0, 0.3);
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  height: 200px;
+}
+
+/* Desktop - Hidden by default, shown only in MainPanel overlay */
+@media (min-width: 769px) {
+  .cameraFeedContainer {
+    display: none;
+  }
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .cameraFeedContainer {
+    height: 180px;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .cameraFeedContainer {
+    display: flex;
+    margin-bottom: 8px;
+    order: 2;
+    height: auto;
+    min-height: 200px;
+    max-height: 300px;
+  }
+  
+  .cameraFeed {
+    min-height: 150px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .cameraFeedContainer {
+    height: 180px;
+    min-height: 180px;
+    max-height: 180px;
+  }
+  
+  .cameraFeed {
+    min-height: 120px;
+  }
+}
+
+.cameraHeader {
+  background-color: #1a1d26;
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.cameraHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cameraIcon {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(188, 225, 255, 0.1);
+  border: 1px solid rgba(188, 225, 255, 0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  padding: 1px;
+}
+
+.cameraInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.cameraTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.cameraTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.12px;
+}
+
+.recordingBadge {
+  background-color: rgba(255, 74, 74, 0.1);
+  border: 1px solid rgba(255, 74, 74, 0.2);
+  border-radius: 4px;
+  padding: 1px 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 14px;
+}
+
+.recordingDot {
+  width: 4px;
+  height: 4px;
+  background-color: #ff4a4a;
+  border-radius: 50%;
+  opacity: 0.579;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 0.579;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.recordingBadge span {
+  font-size: 8px;
+  font-weight: 500;
+  color: #ff4a4a;
+  letter-spacing: 0.2px;
+}
+
+.cameraSpecs {
+  font-size: 9px;
+  color: #858895;
+}
+
+.fullscreenButton {
+  width: 12px;
+  height: 12px;
+  background: none;
+  border: none;
+  color: #858895;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.cameraFeed {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  background: linear-gradient(to bottom, #1a1d26, #0e1117);
+  overflow: hidden;
+}
+
+.cameraImage {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.cameraImageBg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+  opacity: 0.6;
+  animation: cameraFlicker 3s ease-in-out infinite, cameraMove 15s ease-in-out infinite;
+}
+
+@keyframes cameraFlicker {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+
+@keyframes cameraMove {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(-2%, 1%) scale(1.02);
+  }
+  50% {
+    transform: translate(1%, -1%) scale(0.98);
+  }
+  75% {
+    transform: translate(-1%, 2%) scale(1.01);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+.cameraOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3) 0%,
+    transparent 30%,
+    transparent 70%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  pointer-events: none;
+}
+
+.scanLines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 0, 0.03) 2px,
+    rgba(0, 255, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  animation: scanLinesMove 8s linear infinite;
+}
+
+@keyframes scanLinesMove {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(20px);
+  }
+}
+
+.staticNoise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
+  opacity: 0.15;
+  pointer-events: none;
+  animation: staticNoiseFlicker 0.1s infinite;
+}
+
+@keyframes staticNoiseFlicker {
+  0%, 100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.crosshair {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crosshairHorizontal {
+  position: absolute;
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+}
+
+.crosshairVertical {
+  position: absolute;
+  width: 1px;
+  height: 60%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+}
+
+.cameraControls {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+.trackingBadge {
+  background-color: rgba(85, 255, 153, 0.1);
+  border: 1px solid rgba(85, 255, 153, 0.2);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 8px;
+  font-weight: 500;
+  color: #55ff99;
+  letter-spacing: 0.2px;
+}
+
+.cameraInfoBadge {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 8px;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+}
+
+.cameraTime {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 8px;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+}
+

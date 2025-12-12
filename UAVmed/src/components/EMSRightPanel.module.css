@@ -1,0 +1,639 @@
+.emsRightPanel {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  overflow: hidden;
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+  .emsRightPanel {
+    width: 220px;
+    gap: 8px;
+    padding: 8px;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .emsRightPanel {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    gap: 6px;
+    padding: 6px;
+    order: 4;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .emsRightPanel {
+    gap: 4px;
+    padding: 4px;
+  }
+}
+
+/* Ambulance Status Card */
+.ambulanceStatusCard {
+  background-color: #252832;
+  border: 1px solid #2a2e3a;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.ambulanceStatusHeader {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ambulanceIcon {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(65, 189, 117, 0.1);
+  border: 1px solid rgba(65, 189, 117, 0.2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  padding: 1px;
+}
+
+.ambulanceInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ambulanceLabel {
+  font-size: 8px;
+  font-weight: 500;
+  color: #858895;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ambulanceStatus {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.statusDotActive {
+  width: 6px;
+  height: 6px;
+  background-color: #41bd75;
+  border-radius: 50%;
+  opacity: 0.551;
+}
+
+.statusTextActive {
+  font-size: 9px;
+  color: #41bd75;
+}
+
+.etaComparison {
+  background-color: #1a1d26;
+  border: 1px solid #2a2e3a;
+  border-radius: 10px;
+  padding: 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.etaComparisonHeader {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.etaIcon {
+  font-size: 14px;
+}
+
+.etaLabel {
+  font-size: 8px;
+  font-weight: 500;
+  color: #858895;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.etaList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.etaItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.etaItemLeft {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  color: #858895;
+}
+
+.etaDotBlue {
+  width: 8px;
+  height: 8px;
+  background-color: #3aa6ff;
+  border-radius: 50%;
+}
+
+.etaDotGreen {
+  width: 8px;
+  height: 8px;
+  background-color: #41bd75;
+  border-radius: 50%;
+}
+
+.etaValueBlue {
+  font-size: 10px;
+  font-weight: 700;
+  color: #3aa6ff;
+}
+
+.etaValueGreen {
+  font-size: 10px;
+  font-weight: 700;
+  color: #41bd75;
+}
+
+/* Medical Payload Card */
+.medicalPayloadCard {
+  background-color: #252832;
+  border: 1px solid #2a2e3a;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.medicalPayloadHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.medicalPayloadHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.medicalPayloadIcon {
+  font-size: 12px;
+}
+
+.medicalPayloadTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.1px;
+}
+
+.readyBadge {
+  background-color: rgba(65, 189, 117, 0.1);
+  border: 1px solid rgba(65, 189, 117, 0.3);
+  border-radius: 4px;
+  padding: 3px 5px;
+  font-size: 8px;
+  font-weight: 500;
+  color: #41bd75;
+  letter-spacing: 0.2px;
+}
+
+.payloadItems {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.payloadItem {
+  background-color: #1a1d26;
+  border: 1px solid #2a2e3a;
+  border-radius: 10px;
+  padding: 9px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.payloadItemIconRed {
+  width: 32px;
+  height: 32px;
+  background-color: rgba(255, 74, 74, 0.1);
+  border: 1px solid rgba(255, 74, 74, 0.2);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.payloadItemIconBlue {
+  width: 32px;
+  height: 32px;
+  background-color: rgba(58, 166, 255, 0.1);
+  border: 1px solid rgba(58, 166, 255, 0.2);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.payloadItemInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.payloadItemTitle {
+  font-size: 10px;
+  font-weight: 500;
+  color: #ff4a4a;
+  margin-bottom: 2px;
+}
+
+.payloadItemIconBlue + .payloadItemInfo .payloadItemTitle {
+  color: #3aa6ff;
+}
+
+.payloadItemSubtitle {
+  font-size: 8px;
+  color: #858895;
+}
+
+.totalWeightRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 9px;
+  border-top: 1px solid #2a2e3a;
+}
+
+.totalWeightLabel {
+  font-size: 8px;
+  font-weight: 500;
+  color: #858895;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.totalWeightValue {
+  font-size: 10px;
+  font-weight: 500;
+  color: #d0d4da;
+}
+
+/* Mission Progress Card */
+.missionProgressCard {
+  background-color: #252832;
+  border: 1px solid #2a2e3a;
+  border-radius: 8px;
+  padding: 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-shrink: 0;
+}
+
+/* Mobile Responsive - Remove scrolling */
+@media (max-width: 768px) {
+  .missionProgressCard {
+    overflow: visible;
+    min-height: auto;
+  }
+}
+
+.missionProgressTimeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timelineItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  position: relative;
+}
+
+.timelineIconActive {
+  width: 28px;
+  height: 28px;
+  background-color: #bce1ff;
+  border: 2px solid #bce1ff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #0e1117;
+  box-shadow: 0px 10px 15px -3px rgba(85, 255, 153, 0.2);
+  flex-shrink: 0;
+  transition: all 0.4s ease;
+  animation: timelineIconActivate 0.6s ease-out;
+}
+
+@keyframes timelineIconActivate {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.timelineCheckIcon {
+  font-size: 14px;
+  color: #0e1117;
+}
+
+.timelineIconCurrent {
+  width: 28px;
+  height: 28px;
+  background-color: #3aa6ff;
+  border: 2px solid #3aa6ff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #ffffff;
+  opacity: 0.579;
+  box-shadow: 0px 10px 15px -3px rgba(58, 166, 255, 0.2);
+  flex-shrink: 0;
+  transition: all 0.4s ease;
+  animation: timelineIconPulse 2s ease-in-out infinite;
+}
+
+@keyframes timelineIconPulse {
+  0%, 100% {
+    opacity: 0.579;
+    box-shadow: 0px 10px 15px -3px rgba(58, 166, 255, 0.2);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0px 10px 20px -3px rgba(58, 166, 255, 0.4);
+  }
+}
+
+.timelineIconInactive {
+  width: 28px;
+  height: 28px;
+  background-color: #1a1d26;
+  border: 2px solid #2a2e3a;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 500;
+  color: #858895;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.timelineLineActive {
+  width: 2px;
+  height: 12px;
+  background-color: #bce1ff;
+  margin-left: 13px;
+  margin-top: 28px;
+  transition: background-color 0.4s ease;
+  animation: timelineLineActivate 0.5s ease-out;
+}
+
+@keyframes timelineLineActivate {
+  0% {
+    height: 0;
+    opacity: 0;
+  }
+  100% {
+    height: 12px;
+    opacity: 1;
+  }
+}
+
+.timelineLineInactive {
+  width: 2px;
+  height: 12px;
+  background-color: #2a2e3a;
+  margin-left: 13px;
+  margin-top: 28px;
+}
+
+.timelineContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 1px;
+}
+
+.timelineTitleActive {
+  font-size: 10px;
+  font-weight: 500;
+  color: #bce1ff;
+  line-height: 15px;
+  margin-bottom: 2px;
+  transition: color 0.4s ease;
+  animation: timelineTitleActivate 0.5s ease-out;
+}
+
+@keyframes timelineTitleActivate {
+  0% {
+    opacity: 0;
+    transform: translateX(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.timelineTitleCurrent {
+  font-size: 10px;
+  font-weight: 500;
+  color: #3aa6ff;
+  line-height: 15px;
+  margin-bottom: 2px;
+}
+
+.timelineTitleInactive {
+  font-size: 10px;
+  font-weight: 500;
+  color: #858895;
+  line-height: 15px;
+  margin-bottom: 2px;
+}
+
+.timelineTime {
+  font-size: 8px;
+  color: rgba(188, 225, 255, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.timelineTimeCurrent {
+  font-size: 8px;
+  color: #858895;
+}
+
+.timelineTimeInactive {
+  font-size: 8px;
+  color: #858895;
+}
+
+.missionProgressBar {
+  border-top: 1px solid #2a2e3a;
+  padding-top: 1px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progressLabel {
+  font-size: 8px;
+  font-weight: 500;
+  color: #858895;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.progressPercentage {
+  font-size: 10px;
+  font-weight: 700;
+  color: #3aa6ff;
+}
+
+.progressBarContainer {
+  background-color: #1a1d26;
+  border: 1px solid #2a2e3a;
+  border-radius: 10000px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  background: linear-gradient(to bottom, #3aa6ff, #2a8fe5);
+  height: 6px;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: progressBarPulse 2s ease-in-out infinite;
+  margin: 1px;
+  border-radius: 10000px;
+}
+
+@keyframes progressBarPulse {
+  0%, 100% {
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0px 10px 20px -3px rgba(58, 166, 255, 0.3);
+  }
+}
+
+.progressFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8px;
+  color: #858895;
+}
+
+.confirmButton {
+  height: 42px;
+  background: linear-gradient(to bottom, #3aa6ff, #2a8fe5);
+  border: none;
+  border-radius: 12px;
+  padding: 10px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px -4px rgba(58, 166, 255, 0.5);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  animation: confirmButtonPulse 2s ease-in-out infinite;
+  width: 100%;
+}
+
+.confirmButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  animation: none;
+}
+
+@keyframes confirmButtonPulse {
+  0%, 100% {
+    box-shadow: 0px 4px 6px -4px rgba(58, 166, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0px 4px 12px -4px rgba(58, 166, 255, 0.7);
+  }
+}
+
+.confirmIcon {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.confirmButton span {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.confirmButton:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.confirmButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+

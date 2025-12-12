@@ -1,0 +1,54 @@
+.dashboard {
+  width: 100%;
+  height: 100vh;
+  background-color: #0e1117;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Mobile Responsive - Allow page scrolling */
+@media (max-width: 768px) {
+  .dashboard {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+}
+
+.contentArea {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  gap: 8px;
+  padding: 8px;
+  overflow: hidden;
+}
+
+/* Tablet Responsive (768px - 1024px) */
+@media (max-width: 1024px) {
+  .contentArea {
+    gap: 6px;
+    padding: 6px;
+  }
+}
+
+/* Mobile Responsive (< 768px) */
+@media (max-width: 768px) {
+  .contentArea {
+    flex-direction: column;
+    gap: 6px;
+    padding: 6px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+/* Small Mobile (< 480px) */
+@media (max-width: 480px) {
+  .contentArea {
+    gap: 4px;
+    padding: 4px;
+  }
+}
+

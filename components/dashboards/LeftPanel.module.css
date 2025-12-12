@@ -1,0 +1,498 @@
+.leftPanel {
+  width: 240px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  overflow: hidden;
+}
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+  .leftPanel {
+    width: 200px;
+    gap: 6px;
+    padding: 6px;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .leftPanel {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    gap: 6px;
+    padding: 6px;
+    order: 1;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .leftPanel {
+    gap: 4px;
+    padding: 4px;
+  }
+}
+
+.etaCard {
+  border: 1px solid rgba(58, 166, 255, 0.3);
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0px 10px 15px -3px rgba(58, 166, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.etaHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.etaIcon {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.etaInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.etaLabel {
+  font-size: 8px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  line-height: 12px;
+}
+
+.etaTime {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.45px;
+  line-height: 28px;
+}
+
+.etaArrow {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.etaDetails {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.infoCard {
+  background-color: #252832;
+  border: 1px solid #2a2e3a;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.cardIcon {
+  font-size: 14px;
+}
+
+.cardLabel {
+  font-size: 8px;
+  font-weight: 500;
+  color: #858895;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 10px;
+  color: #d0d4da;
+}
+
+.metricsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.metricCard {
+  background-color: #252832;
+  border: 1px solid #2a2e3a;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.metricHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.metricIconBlue {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(58, 166, 255, 0.1);
+  border: 1px solid rgba(58, 166, 255, 0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  padding: 1px;
+}
+
+.metricIconPurple {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(95, 113, 246, 0.1);
+  border: 1px solid rgba(95, 113, 246, 0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  padding: 1px;
+}
+
+.metricInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.metricLabel {
+  font-size: 8px;
+  font-weight: 500;
+  color: #858895;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  line-height: 12px;
+}
+
+.metricValue {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  line-height: 28px;
+}
+
+.metricUnit {
+  font-size: 10px;
+  font-weight: 400;
+  color: #858895;
+}
+
+.progressBar {
+  background-color: #1a1d26;
+  border: 1px solid #2a2e3a;
+  border-radius: 10000px;
+  height: 4px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.progressFillBlue {
+  background: linear-gradient(to bottom, #3aa6ff, #2a8fe5);
+  height: 2px;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.progressFillPurple {
+  background: linear-gradient(to bottom, #94a1ff, #5f71f6);
+  height: 2px;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.progressLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8px;
+  color: #858895;
+}
+
+.radarCard {
+  flex: 1;
+  min-height: 0;
+  background-color: #252832;
+  border: 1px solid #2a2e3a;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.radarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.radarHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.radarInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.radarRange {
+  font-size: 9px;
+  color: #d0d4da;
+  line-height: 13.5px;
+}
+
+.activeBadge {
+  background-color: rgba(95, 113, 246, 0.1);
+  border: 1px solid rgba(95, 113, 246, 0.2);
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 8px;
+  font-weight: 500;
+  color: #5f71f6;
+}
+
+.radarDisplay {
+  flex: 1;
+  min-height: 0;
+  background-color: #1a1d26;
+  border: 1px solid #2a2e3a;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  position: relative;
+  /* Ensure square container */
+  aspect-ratio: 1;
+}
+
+.radarCircle {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  max-width: 160px;
+  max-height: 160px;
+  aspect-ratio: 1;
+  border-radius: 100%;
+  background: radial-gradient(circle, rgba(95, 113, 246, 0.1) 0%, transparent 70%);
+  border: 0px solid rgba(95, 113, 246, 0.2);
+  overflow: hidden;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Concentric radar rings */
+.radarRing1,
+.radarRing2 {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(95, 113, 246, 0.15);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: radarRingPulse 3s ease-in-out infinite;
+  aspect-ratio: 1;
+}
+
+.radarRing1 {
+  width: 33.33%;
+  padding-bottom: 33.33%;
+  height: 0;
+  animation-delay: 0s;
+}
+
+.radarRing2 {
+  width: 66.66%;
+  padding-bottom: 66.66%;
+  height: 0;
+  animation-delay: 1s;
+}
+
+@keyframes radarRingPulse {
+  0%, 100% {
+    opacity: 0.15;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+/* Rotating radar sweep */
+.radarSweep {
+  position: absolute;
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(95, 113, 246, 0.3) 20%,
+    rgba(95, 113, 246, 0.8) 50%,
+    rgba(95, 113, 246, 0.3) 80%,
+    transparent 100%
+  );
+  top: 50%;
+  left: 50%;
+  transform-origin: 0 50%;
+  animation: radarSweep 3s linear infinite;
+  box-shadow: 0 0 10px rgba(95, 113, 246, 0.5);
+}
+
+@keyframes radarSweep {
+  0% {
+    transform: translate(0, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(0, -50%) rotate(360deg);
+  }
+}
+
+.radarCenter {
+  width: 8px;
+  height: 8px;
+  background-color: #5f71f6;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 8px rgba(95, 113, 246, 0.8);
+}
+
+.radarCenterPulse {
+  position: absolute;
+  inset: -4px;
+  background-color: rgba(95, 113, 246, 0.4);
+  border-radius: 50%;
+  animation: centerPulse 2s ease-in-out infinite;
+}
+
+@keyframes centerPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Detection dots */
+.radarDotWarning,
+.radarDotDanger,
+.radarDotInfo {
+  position: absolute;
+  border-radius: 50%;
+  animation: dotBlink 2s ease-in-out infinite;
+  z-index: 1;
+}
+
+.radarDotWarning {
+  width: 6px;
+  height: 6px;
+  background-color: #ffa44a;
+  box-shadow: 0 0 6px rgba(255, 164, 74, 0.8);
+  animation-delay: 0s;
+}
+
+.radarDotDanger {
+  width: 8px;
+  height: 8px;
+  background-color: #ff4a4a;
+  box-shadow: 0 0 8px rgba(255, 74, 74, 0.8);
+  animation-delay: 0.5s;
+}
+
+.radarDotInfo {
+  width: 5px;
+  height: 5px;
+  background-color: #3aa6ff;
+  box-shadow: 0 0 5px rgba(58, 166, 255, 0.8);
+  animation-delay: 1s;
+}
+
+@keyframes dotBlink {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.3);
+  }
+}
+
+.radarLegend {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  padding-top: 8px;
+  flex-shrink: 0;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: #858895;
+}
+
+.legendDotWarning {
+  width: 6px;
+  height: 6px;
+  background-color: #ffa44a;
+  border-radius: 50%;
+}
+
+.legendDotDanger {
+  width: 6px;
+  height: 6px;
+  background-color: #ff4a4a;
+  border-radius: 50%;
+}
+
+.legendDotInfo {
+  width: 6px;
+  height: 6px;
+  background-color: #3aa6ff;
+  border-radius: 50%;
+}
+
