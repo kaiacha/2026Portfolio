@@ -392,7 +392,7 @@ const SlideContent = ({ slide, isActive }) => {
     return (
       <div className="slide-section h-screen w-full flex items-center px-4 md:px-8 lg:px-16">
         <motion.div
-          className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center"
+          className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-4 lg:gap-12 items-center"
           variants={slideVariants}
           initial="hidden"
           animate={isActive ? "visible" : "hidden"}

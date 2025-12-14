@@ -101,7 +101,7 @@ const ImageSlider = ({ images, imageAlts = [] }: { images: string[]; imageAlts?:
 
   return (
     <div className="rounded-xl overflow-hidden relative">
-      <div className="relative w-full aspect-[4/3] overflow-hidden">
+      <div className="relative w-full aspect-[4/2.5] overflow-hidden">
         {images.map((image, index) => (
           <motion.div
             key={index}
@@ -161,6 +161,8 @@ const ImageSlider = ({ images, imageAlts = [] }: { images: string[]; imageAlts?:
 }
 
 const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) => {
+  const cubicBezierEase = [0.4, 0, 0.2, 1] as [number, number, number, number]
+  
   const slideVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -168,7 +170,7 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
       y: 0,
       transition: {
         duration: 0.6,
-        ease: [0.4, 0, 0.2, 1],
+        ease: cubicBezierEase,
         staggerChildren: 0.15,
       },
     },
@@ -179,7 +181,7 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
+      transition: { duration: 0.5, ease: cubicBezierEase },
     },
   }
 
@@ -191,22 +193,67 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
     const DashboardFullScreen = () => {
       const containerRef = useRef<HTMLDivElement>(null)
       const [scale, setScale] = useState(1)
+      const [isMobile, setIsMobile] = useState(false)
+
+      useEffect(() => {
+        const checkMobile = () => {
+          setIsMobile(window.innerWidth < 768)
+        }
+        checkMobile()
+        window.addEventListener('resize', checkMobile)
+        return () => window.removeEventListener('resize', checkMobile)
+      }, [])
 
       useEffect(() => {
         const updateScale = () => {
-          if (containerRef.current) {
+          if (containerRef.current && !isMobile) {
             const containerWidth = window.innerWidth
             const containerHeight = window.innerHeight
+            
+            // Calculate scale based on width to maintain aspect ratio
             const scaleX = containerWidth / 1440
+            
+            // Check if scaled height fits within viewport
+            const scaledHeight = 800 * scaleX
             const scaleY = containerHeight / 800
-            setScale(Math.min(scaleX, scaleY) * 0.85) // Reduce size by 15%
+            
+            // Use the smaller scale to ensure it fits, maintaining aspect ratio
+            const finalScale = Math.min(scaleX, scaleY) * 0.9 // Slight padding
+            
+            setScale(finalScale)
           }
         }
 
         updateScale()
         window.addEventListener('resize', updateScale)
         return () => window.removeEventListener('resize', updateScale)
-      }, [])
+      }, [isMobile])
+
+      // On mobile, show static image if available, otherwise show scaled component
+      if (isMobile && slide.image) {
+        return (
+          <div className="slide-section h-screen w-full relative overflow-hidden bg-slate-950">
+            <motion.div
+              className="w-full h-full flex items-center justify-center px-4"
+              variants={slideVariants}
+              initial="hidden"
+              animate={isActive ? 'visible' : 'hidden'}
+              style={{ marginTop: '-30px' }}
+            >
+              <div className="w-full max-w-full h-auto">
+                <Image
+                  src={slide.image}
+                  alt={slide.imageAlt || slide.title || 'Dashboard'}
+                  width={1440}
+                  height={800}
+                  className="w-full h-auto object-contain rounded-lg"
+                  style={{ maxHeight: '90vh' }}
+                />
+              </div>
+            </motion.div>
+          </div>
+        )
+      }
 
       return (
         <div className="slide-section h-screen w-full relative overflow-hidden bg-slate-950">
@@ -224,6 +271,7 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
                 height: '800px',
                 transform: `scale(${scale})`,
                 transformOrigin: 'center center',
+                aspectRatio: '1440 / 800',
               }}
             >
               {slide.component && React.createElement(slide.component)}
@@ -238,95 +286,214 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
 
   // Before/After comparison layout
   if (layoutType === 'split' && slide.beforeAfterImages) {
-    return (
-      <div className="slide-section h-screen w-full flex items-center px-4 md:px-8 lg:px-16">
-        <motion.div
-          className="w-full max-w-7xl"
-          variants={slideVariants}
-          initial="hidden"
-          animate={isActive ? 'visible' : 'hidden'}
-          style={{ marginTop: '-30px' }}
-        >
-          {slide.tag && (
-            <motion.div variants={itemVariants} className="mb-2 text-center">
-              <span className="text-[10px] font-medium text-blue-400 uppercase tracking-widest">
-                {slide.tag}
-              </span>
-            </motion.div>
-          )}
-          <motion.h1
-            variants={itemVariants}
-            className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-8 leading-tight text-center"
+    const BeforeAfterSlider = () => {
+      const [currentIndex, setCurrentIndex] = useState(0)
+      const [isMobile, setIsMobile] = useState(false)
+      const beforeAfterImages = slide.beforeAfterImages!
+
+      useEffect(() => {
+        const checkMobile = () => {
+          setIsMobile(window.innerWidth < 768)
+        }
+        checkMobile()
+        window.addEventListener('resize', checkMobile)
+        return () => window.removeEventListener('resize', checkMobile)
+      }, [])
+
+      const goToPrevious = () => {
+        setCurrentIndex((prev) => (prev === 0 ? 1 : prev - 1))
+      }
+
+      const goToNext = () => {
+        setCurrentIndex((prev) => (prev === 0 ? 1 : 0))
+      }
+
+      const panels = [
+        {
+          type: 'before',
+          label: 'Before',
+          labelColor: 'text-slate-400',
+          image: beforeAfterImages.before,
+          imageAlt: beforeAfterImages.beforeAlt || 'Before state',
+          text: beforeAfterImages.beforeText,
+        },
+        {
+          type: 'after',
+          label: 'After',
+          labelColor: 'text-blue-400',
+          image: beforeAfterImages.after,
+          imageAlt: beforeAfterImages.afterAlt || 'After state',
+          text: beforeAfterImages.afterText,
+        },
+      ]
+
+      return (
+        <div className="slide-section h-screen w-full flex items-center px-4 md:px-8 lg:px-16">
+          <motion.div
+            className="w-full max-w-7xl"
+            variants={slideVariants}
+            initial="hidden"
+            animate={isActive ? 'visible' : 'hidden'}
+            style={{ marginTop: '-30px' }}
           >
-            {slide.title}
-          </motion.h1>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-            {/* Before Panel */}
-            <motion.div variants={itemVariants} className="space-y-4">
-              <div className="rounded-xl overflow-hidden bg-slate-800/50 border border-slate-700 p-4">
-                <p className="text-slate-400 text-sm font-medium mb-3">Before</p>
-                {slide.beforeAfterImages.beforeText && (
-                  <div
-                    className="text-xs text-slate-300 mb-4"
-                    dangerouslySetInnerHTML={{
-                      __html: slide.beforeAfterImages.beforeText,
+            {slide.tag && (
+              <motion.div variants={itemVariants} className="mb-2 text-center">
+                <span className="text-[10px] font-medium text-blue-400 uppercase tracking-widest">
+                  {slide.tag}
+                </span>
+              </motion.div>
+            )}
+            <motion.h1
+              variants={itemVariants}
+              className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-8 leading-tight text-center"
+            >
+              {slide.title}
+            </motion.h1>
+
+            {/* Desktop: Side-by-side grid */}
+            <div className="hidden lg:grid grid-cols-2 gap-6 lg:gap-8">
+              {panels.map((panel, index) => (
+                <motion.div key={panel.type} variants={itemVariants} className="space-y-4">
+                  <div className="rounded-xl overflow-hidden bg-slate-800/50 border border-slate-700 p-4">
+                    <p className={`${panel.labelColor} text-sm font-medium mb-3`}>{panel.label}</p>
+                    {panel.text && (
+                      <div
+                        className="text-xs text-slate-300 mb-4"
+                        dangerouslySetInnerHTML={{
+                          __html: panel.text,
+                        }}
+                      />
+                    )}
+                    <div className="rounded-lg overflow-hidden flex items-center justify-center bg-slate-900/50 relative aspect-video">
+                      <Image
+                        src={panel.image}
+                        alt={panel.imageAlt}
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Mobile: Horizontal slider */}
+            <div className="lg:hidden relative">
+              <div className="relative w-full overflow-hidden">
+                {panels.map((panel, index) => (
+                  <motion.div
+                    key={panel.type}
+                    className="w-full"
+                    initial={{ opacity: 0, x: index > currentIndex ? '100%' : '-100%' }}
+                    animate={{
+                      opacity: index === currentIndex ? 1 : 0,
+                      x: index === currentIndex ? '0%' : index > currentIndex ? '100%' : '-100%',
                     }}
-                  />
-                )}
-                <div className="rounded-lg overflow-hidden flex items-center justify-center bg-slate-900/50 relative aspect-video">
-                  <Image
-                    src={slide.beforeAfterImages.before}
-                    alt={slide.beforeAfterImages.beforeAlt || 'Before state'}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
+                    transition={{ duration: 0.5, ease: 'easeInOut' }}
+                    style={{ position: index === currentIndex ? 'relative' : 'absolute', top: 0, left: 0 }}
+                  >
+                    <div className="rounded-xl overflow-hidden bg-slate-800/50 border border-slate-700 p-4 space-y-4">
+                      <p className={`${panel.labelColor} text-sm font-medium`}>{panel.label}</p>
+                      {panel.text && (
+                        <div
+                          className="text-xs text-slate-300"
+                          dangerouslySetInnerHTML={{
+                            __html: panel.text,
+                          }}
+                        />
+                      )}
+                      <div className="rounded-lg overflow-hidden flex items-center justify-center bg-slate-900/50 relative w-full" style={{ minHeight: '300px' }}>
+                        <Image
+                          src={panel.image}
+                          alt={panel.imageAlt}
+                          width={800}
+                          height={600}
+                          className="w-full h-auto object-contain"
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-            </motion.div>
-            {/* After Panel */}
-            <motion.div variants={itemVariants} className="space-y-4">
-              <div className="rounded-xl overflow-hidden bg-slate-800/50 border border-slate-700 p-4">
-                <p className="text-blue-400 text-sm font-medium mb-3">After</p>
-                {slide.beforeAfterImages.afterText && (
-                  <div
-                    className="text-xs text-slate-300 mb-4"
-                    dangerouslySetInnerHTML={{
-                      __html: slide.beforeAfterImages.afterText,
-                    }}
+
+              {/* Navigation Buttons */}
+              <button
+                onClick={goToPrevious}
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-slate-900/80 hover:bg-slate-800 text-white p-2 rounded-full transition-colors z-10"
+                aria-label="Previous"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={goToNext}
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-slate-900/80 hover:bg-slate-800 text-white p-2 rounded-full transition-colors z-10"
+                aria-label="Next"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+
+              {/* Dots Indicator */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                {panels.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      index === currentIndex ? 'bg-blue-400 w-6' : 'bg-slate-600 hover:bg-slate-500'
+                    }`}
+                    aria-label={`Go to ${panels[index].label}`}
                   />
-                )}
-                <div className="rounded-lg overflow-hidden flex items-center justify-center bg-slate-900/50 relative aspect-video">
-                  <Image
-                    src={slide.beforeAfterImages.after}
-                    alt={slide.beforeAfterImages.afterAlt || 'After state'}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
+                ))}
               </div>
-            </motion.div>
-          </div>
-        </motion.div>
-      </div>
-    )
+            </div>
+          </motion.div>
+        </div>
+      )
+    }
+
+    return <BeforeAfterSlider />
   }
 
   if (layoutType === 'split' && (hasImage || hasComponent)) {
-    return (
-      <div className="slide-section h-screen w-full flex items-center px-4 md:px-8 lg:px-16">
-        <motion.div
-          className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center"
-          variants={slideVariants}
-          initial="hidden"
-          animate={isActive ? 'visible' : 'hidden'}
-          style={{ marginTop: '-30px' }}
-        >
-          <motion.div variants={itemVariants} className="order-2 lg:order-1">
-            {hasComponent ? (
-              <DashboardContainer>
-                {slide.component && React.createElement(slide.component)}
-              </DashboardContainer>
-            ) : slide.images && Array.isArray(slide.images) ? (
+    const SplitLayout = () => {
+      const [isMobile, setIsMobile] = useState(false)
+
+      useEffect(() => {
+        const checkMobile = () => {
+          setIsMobile(window.innerWidth < 768)
+        }
+        checkMobile()
+        window.addEventListener('resize', checkMobile)
+        return () => window.removeEventListener('resize', checkMobile)
+      }, [])
+
+      return (
+        <div className="slide-section h-screen w-full flex items-center px-4 md:px-8 lg:px-16">
+          <motion.div
+            className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-4 lg:gap-12 items-center"
+            variants={slideVariants}
+            initial="hidden"
+            animate={isActive ? 'visible' : 'hidden'}
+            style={{ marginTop: '-30px' }}
+          >
+            <motion.div variants={itemVariants} className="order-2 lg:order-1">
+              {hasComponent ? (
+                // On mobile, show image if available; otherwise show component
+                isMobile && slide.image ? (
+                  <div className="rounded-xl overflow-hidden relative aspect-video">
+                    <Image
+                      src={slide.image}
+                      alt={slide.imageAlt || slide.title || 'Dashboard'}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                ) : (
+                  <DashboardContainer>
+                    {slide.component && React.createElement(slide.component)}
+                  </DashboardContainer>
+                )
+              ) : slide.images && Array.isArray(slide.images) ? (
               <ImageSlider images={slide.images} imageAlts={slide.imageAlts || []} />
             ) : slide.image ? (
               <div
@@ -389,7 +556,10 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
           </motion.div>
         </motion.div>
       </div>
-    )
+      )
+    }
+
+    return <SplitLayout />
   }
 
   if (layoutType === 'image-full' && hasImage) {
@@ -588,13 +758,13 @@ export default function CaseStudySlider({ slides }: CaseStudySliderProps) {
 
   return (
     <div className="case-study-container relative w-full h-screen overflow-hidden">
-      <div className="slide-indicators fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-1.5">
+      <div className="slide-indicators absolute top-2 left-0 right-0 px-4 md:left-auto md:right-6 md:top-1/2 md:-translate-y-1/2 md:fixed md:px-0 z-50 flex flex-row md:flex-col justify-between md:justify-start gap-1 md:gap-1.5">
         {slides.map((slide, index) => (
           <button
             key={slide.id}
             onClick={() => setCurrentSlide(index)}
-            className={`indicator-dot w-1.5 h-6 rounded-full transition-all duration-300 ${
-              index === currentSlide ? 'bg-blue-400 h-10 w-1.5' : 'bg-slate-700 hover:bg-slate-600'
+            className={`indicator-dot w-3 h-1.5 md:w-1.5 md:h-6 rounded-full transition-all duration-300 flex-shrink-0 ${
+              index === currentSlide ? 'bg-blue-400 w-6 h-1.5 md:w-1.5 md:h-10' : 'bg-slate-700 hover:bg-slate-600'
             }`}
           />
         ))}
@@ -614,7 +784,7 @@ export default function CaseStudySlider({ slides }: CaseStudySliderProps) {
 
       {currentSlide < slides.length - 1 && (
         <motion.div
-          className="scroll-hint fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center gap-1 text-slate-500"
+          className="scroll-hint fixed bottom-6 left-0 right-0 mx-auto z-40 flex flex-col items-center gap-1 text-slate-500 w-fit"
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity }}
         >

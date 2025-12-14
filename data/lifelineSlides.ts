@@ -40,6 +40,8 @@ export const lifelineSlides: LifelineSlide[] = [
     id: 'dashboard-live',
     layout: 'dashboard-full',
     component: NavigatorDashboard,
+    image: '/images/NavigatorDashboard.png',
+    imageAlt: 'Navigator Dashboard - Mobile View',
   },
   {
     id: 'overview',
@@ -203,6 +205,8 @@ export const lifelineSlides: LifelineSlide[] = [
     title: 'Navigator Dashboard — Mission Control',
     layout: 'split',
     component: NavigatorDashboard,
+    image: '/images/NavigatorDashboard.png',
+    imageAlt: 'Navigator Dashboard',
     body: `
       <div class="space-y-3">
         <div>
@@ -243,6 +247,8 @@ export const lifelineSlides: LifelineSlide[] = [
     title: 'Pilot Dashboard — Flight Control',
     layout: 'split',
     component: PilotDashboard,
+    image: '/images/PilotDashboard.png',
+    imageAlt: 'Pilot Dashboard',
     body: `
       <div class="space-y-3">
         <div>
@@ -282,6 +288,8 @@ export const lifelineSlides: LifelineSlide[] = [
     title: 'EMS Dashboard — Medical Support',
     layout: 'split',
     component: EMSDashboard,
+    image: '/images/EMSDashboard.png',
+    imageAlt: 'EMS Dashboard',
     body: `
       <div class="space-y-3">
         <div>
@@ -399,10 +407,10 @@ export const lifelineSlides: LifelineSlide[] = [
     imageAlt: 'EMS Controller Design - Rugged laptop with dashboard interface',
   },
   {
-    id: 'workspace',
+    id: 'workspace-1',
     tag: '07. Workspace & Operator Environment Design',
     title: 'Ergonomic Workspace Design',
-    layout: 'split',
+    layout: 'centered',
     body: `
       <div class="space-y-3">
         <p class="text-sm text-slate-300">
@@ -426,13 +434,20 @@ export const lifelineSlides: LifelineSlide[] = [
             <li>EMS: Standard laptop posture risks → recommended separating display and input devices</li>
           </ul>
         </div>
-        <div class="p-3 bg-slate-800 rounded-lg border-l-4 border-blue-500">
-          <p class="text-white font-semibold mb-1.5 text-sm">Workspace Rendering</p>
-          <p class="text-slate-300 text-sm">
-            The final containerized workspace design supports neutral postures for 12-hour shifts, adjustable 
-            chairs and dual monitor arms, clear line-of-sight across operators, and equipment spacing for teamwork and safety.
-          </p>
-        </div>
+      </div>
+    `,
+  },
+  {
+    id: 'workspace-2',
+    tag: '07. Workspace & Operator Environment Design',
+    title: 'Workspace Rendering',
+    layout: 'split',
+    body: `
+      <div class="space-y-3">
+        <p class="text-slate-300 text-sm">
+          The final containerized workspace design supports neutral postures for 12-hour shifts, adjustable 
+          chairs and dual monitor arms, clear line-of-sight across operators, and equipment spacing for teamwork and safety.
+        </p>
       </div>
     `,
     images: [
