@@ -1,4 +1,7 @@
-import type { Metadata } from 'next'
+'use client'
+
+import React, { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 import Image from 'next/image'
 import WindowPageLayout from '@/components/WindowPageLayout'
 import slide1Dashboard from '@/src/Detail/Dashboard.png'
@@ -124,9 +127,40 @@ const WORKFLOW_STEPS = [
   },
 ]
 
-export const metadata: Metadata = {
-  title: 'Anticancer | Mikyo Kaia Cha',
-  description: 'Anticancer product concept and case study by Mikyo Kaia Cha.',
+// Animated section wrapper component
+const AnimatedSection = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => {
+  const ref = useRef<HTMLElement>(null)
+  const isInView = useInView(ref, { once: true, margin: '-100px' })
+
+  return (
+    <motion.section
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] as const }}
+    >
+      {children}
+    </motion.section>
+  )
+}
+
+// Animated div wrapper for inner content
+const AnimatedDiv = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: '-50px' })
+
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      transition={{ duration: 0.5, delay, ease: [0.4, 0, 0.2, 1] as const }}
+    >
+      {children}
+    </motion.div>
+  )
 }
 
 export default function AnticancerPage() {
@@ -134,7 +168,7 @@ export default function AnticancerPage() {
     <WindowPageLayout title="Anticancer" currentPage="projects" fullScreen enableFinderModals>
       <article className="h-full w-full max-w-full overflow-y-auto overflow-x-hidden pb-10 ">
         {/* Slide 1 – dashboard showcase */}
-        <section className="px-6 pt-12 text-black md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 text-black md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-4xl ">
             <div className="relative w-full overflow-hidden">
               <Image
@@ -147,10 +181,10 @@ export default function AnticancerPage() {
               />
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 2 – narrative hero */}
-        <section className="px-6 pt-12 md:pt-28 text-black md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 md:pt-28 text-black md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 space-y-4 md:space-y-6 text-black">
               <div className="text-xs uppercase tracking-[0.35em] text-black/60">Medical Dashboard</div>
@@ -188,10 +222,10 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 3 – overview summary */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-24 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-24 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-start">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#C0C0C0]">Overview</span>
@@ -236,10 +270,10 @@ export default function AnticancerPage() {
               ))}
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 4 – Background 01 */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl space-y-6 md:space-y-10">
             <div className="space-y-2 md:space-y-3">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Background 01</span>
@@ -329,10 +363,10 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 5 – Background 02 */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl space-y-6 md:space-y-10">
             <div className="space-y-2 md:space-y-3">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Background 02</span>
@@ -454,10 +488,10 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 6 – Doctor workflow */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl rounded-[32px] bg-gradient-to-br from-[#7EA9FF] via-[#6C88FF] to-[#4E6ADB] p-6 md:p-8 text-white shadow-[0_40px_120px_rgba(78,106,219,0.35)]">
             <header className="space-y-2">
               <span className="text-xs uppercase tracking-[0.35em] text-white/80">Workflow</span>
@@ -498,10 +532,10 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 7 – Main Dashboard Spotlight */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Main Dashboard</span>
@@ -535,10 +569,10 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 8 – Patient dashboard view */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-start">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Patient Dashboard</span>
@@ -569,10 +603,10 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 9 – Patient overview panel */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 order-2 lg:order-1">
               <div className="mx-auto w-full p-3 bg-white max-w-[160px] overflow-hidden border rounded-[16px] border-[#ECEFF8] bg-white shadow-[0_20px_60px_rgba(78,106,219,0.55)]">
@@ -610,10 +644,10 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 10 – Personalized treatment solutions */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">
@@ -664,10 +698,10 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 11 – Similar patient cases */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">4. Comparing Similar Cases</span>
@@ -713,10 +747,10 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 12 – AI Assessment Notes */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">5. AI-Assisted Clinical Insights</span>
@@ -764,10 +798,10 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 13 – Doctor's Notes */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">6. Finalizing & Documenting Treatment</span>
@@ -813,10 +847,10 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 14 – Technical approach */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl space-y-6 md:space-y-12">
             <header className="space-y-2">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Technical Approach</span>
@@ -867,10 +901,10 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 15 – Feature selection & modeling */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl space-y-6 md:space-y-12">
             <header className="space-y-2">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Model Development</span>
@@ -926,19 +960,19 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 16 – Final UI collage */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl space-y-4 md:space-y-6 text-center">
           <div className="overflow-hidden rounded-[16px] bg-white">
               <Image src={fullMockupImage} alt="Anticancer UI collage" className="h-auto w-full object-cover" />
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Slide 17 – Color system */}
-        <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl space-y-6 md:space-y-12">
             <header className="space-y-2">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Design Guide</span>
@@ -1002,7 +1036,7 @@ export default function AnticancerPage() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
       </article>
     </WindowPageLayout>
   )

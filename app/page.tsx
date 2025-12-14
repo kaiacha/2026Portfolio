@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import HomeContent from '@/components/HomeContent'
-import GlowField from '@/components/GlowField'
+import GradientMesh from '@/components/GradientMesh'
+import CursorTrail from '@/components/CursorTrail'
 
 export const metadata: Metadata = {
   title: 'Mikyo Kaia Cha - UX Designer Portfolio | Human-Centered Design',
@@ -39,7 +40,8 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-slate-950">
-      {/* <GlowField /> */}
+      <GradientMesh />
+      <CursorTrail />
 
       <div className="relative z-10">
         <HomeContent />

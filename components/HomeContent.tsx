@@ -10,6 +10,7 @@ import { WidgetStack } from '@/components/widgets/WidgetStack'
 import AppIcons from '@/components/AppIcons'
 import VolunteeringWindow from '@/components/VolunteeringWindow'
 import ProjectsWindow from '@/components/ProjectsWindow'
+import GradientMesh from '@/components/GradientMesh'
 import asuLogo from '@/src/assets/ASULogo.png'
 
 export default function HomeContent() {
@@ -51,15 +52,8 @@ export default function HomeContent() {
   return (
     <>
       <main className="min-h-screen relative overflow-hidden">
-        {/* Background Image */}
-        <div className="fixed inset-0 z-0">
-          <img
-            src="/images/background.jpg"
-            alt="Background"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/50"></div>
-        </div>
+        {/* Animated Gradient Mesh Background */}
+        <GradientMesh />
 
         {/* Top Bar */}
         <TopBar />
