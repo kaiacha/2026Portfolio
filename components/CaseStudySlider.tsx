@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 
@@ -36,6 +36,24 @@ interface Slide {
 
 interface CaseStudySliderProps {
   slides: Slide[]
+}
+
+// AnimatedSection component for scroll animations on mobile
+const AnimatedSection = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => {
+  const ref = useRef<HTMLElement>(null)
+  const isInView = useInView(ref, { once: true, margin: '-100px' })
+
+  return (
+    <motion.section
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] as const }}
+    >
+      {children}
+    </motion.section>
+  )
 }
 
 const DashboardContainer = ({ children }: { children: React.ReactNode }) => {
@@ -160,7 +178,7 @@ const ImageSlider = ({ images, imageAlts = [] }: { images: string[]; imageAlts?:
   )
 }
 
-const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) => {
+const SlideContent = ({ slide, isActive, isMobile = false }: { slide: Slide; isActive: boolean; isMobile?: boolean }) => {
   const cubicBezierEase = [0.4, 0, 0.2, 1] as [number, number, number, number]
   
   const slideVariants = {
@@ -193,16 +211,6 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
     const DashboardFullScreen = () => {
       const containerRef = useRef<HTMLDivElement>(null)
       const [scale, setScale] = useState(1)
-      const [isMobile, setIsMobile] = useState(false)
-
-      useEffect(() => {
-        const checkMobile = () => {
-          setIsMobile(window.innerWidth < 768)
-        }
-        checkMobile()
-        window.addEventListener('resize', checkMobile)
-        return () => window.removeEventListener('resize', checkMobile)
-      }, [])
 
       useEffect(() => {
         const updateScale = () => {
@@ -232,13 +240,12 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
       // On mobile, show static image if available, otherwise show scaled component
       if (isMobile && slide.image) {
         return (
-          <div className="slide-section h-screen w-full relative overflow-hidden bg-slate-950">
+          <div className="slide-section w-full relative overflow-hidden bg-slate-950">
             <motion.div
-              className="w-full h-full flex items-center justify-center px-4"
+              className="w-full flex items-center justify-center px-4"
               variants={slideVariants}
               initial="hidden"
               animate={isActive ? 'visible' : 'hidden'}
-              style={{ marginTop: '-30px' }}
             >
               <div className="w-full max-w-full h-auto">
                 <Image
@@ -288,17 +295,7 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
   if (layoutType === 'split' && slide.beforeAfterImages) {
     const BeforeAfterSlider = () => {
       const [currentIndex, setCurrentIndex] = useState(0)
-      const [isMobile, setIsMobile] = useState(false)
       const beforeAfterImages = slide.beforeAfterImages!
-
-      useEffect(() => {
-        const checkMobile = () => {
-          setIsMobile(window.innerWidth < 768)
-        }
-        checkMobile()
-        window.addEventListener('resize', checkMobile)
-        return () => window.removeEventListener('resize', checkMobile)
-      }, [])
 
       const goToPrevious = () => {
         setCurrentIndex((prev) => (prev === 0 ? 1 : prev - 1))
@@ -328,13 +325,13 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
       ]
 
       return (
-        <div className="slide-section h-screen w-full flex items-center px-4 md:px-8 lg:px-16">
+        <div className={`slide-section w-full flex items-center px-4 md:px-8 lg:px-16 ${isMobile ? '' : 'h-screen'}`}>
           <motion.div
             className="w-full max-w-7xl"
             variants={slideVariants}
             initial="hidden"
             animate={isActive ? 'visible' : 'hidden'}
-            style={{ marginTop: '-30px' }}
+            style={isMobile ? {} : { marginTop: '-30px' }}
           >
             {slide.tag && (
               <motion.div variants={itemVariants} className="mb-2 text-center">
@@ -456,25 +453,15 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
 
   if (layoutType === 'split' && (hasImage || hasComponent)) {
     const SplitLayout = () => {
-      const [isMobile, setIsMobile] = useState(false)
-
-      useEffect(() => {
-        const checkMobile = () => {
-          setIsMobile(window.innerWidth < 768)
-        }
-        checkMobile()
-        window.addEventListener('resize', checkMobile)
-        return () => window.removeEventListener('resize', checkMobile)
-      }, [])
 
       return (
-        <div className="slide-section h-screen w-full flex items-center px-4 md:px-8 lg:px-16">
+        <div className={`slide-section w-full flex items-center px-4 md:px-8 lg:px-16 ${isMobile ? '' : 'h-screen'}`}>
           <motion.div
             className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-4 lg:gap-12 items-center"
             variants={slideVariants}
             initial="hidden"
             animate={isActive ? 'visible' : 'hidden'}
-            style={{ marginTop: '-30px' }}
+            style={isMobile ? {} : { marginTop: '-30px' }}
           >
             <motion.div variants={itemVariants} className="order-2 lg:order-1">
               {hasComponent ? (
@@ -563,8 +550,9 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
   }
 
   if (layoutType === 'image-full' && hasImage) {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
     return (
-      <div className="slide-section h-screen w-full relative">
+      <div className={`slide-section w-full relative ${isMobile ? 'min-h-[60vh]' : 'h-screen'}`}>
         <motion.div
           className="w-full h-full relative"
           variants={slideVariants}
@@ -617,13 +605,13 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
   }
 
   return (
-    <div className="slide-section h-screen w-full flex items-center justify-center px-4 md:px-8 lg:px-16">
+    <div className={`slide-section w-full flex items-center justify-center px-4 md:px-8 lg:px-16 ${isMobile ? '' : 'h-screen'}`}>
       <motion.div
         className="max-w-4xl w-full"
         variants={slideVariants}
         initial="hidden"
         animate={isActive ? 'visible' : 'hidden'}
-        style={{ marginTop: '-30px' }}
+        style={isMobile ? {} : { marginTop: '-30px' }}
       >
         {slide.tag && (
           <motion.div variants={itemVariants} className="mb-2">
@@ -691,10 +679,129 @@ const SlideContent = ({ slide, isActive }: { slide: Slide; isActive: boolean }) 
 
 export default function CaseStudySlider({ slides }: CaseStudySliderProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const scrollLockRef = useRef(false)
   const lastScrollTimeRef = useRef(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const loadedImagesRef = useRef<Set<string>>(new Set())
+  const totalImagesRef = useRef(0)
 
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Count total images and track loading
+  useEffect(() => {
+    const imageUrls = new Set<string>()
+    
+    slides.forEach((slide) => {
+      if (slide.image) imageUrls.add(slide.image)
+      if (slide.images) {
+        slide.images.forEach((img) => imageUrls.add(img))
+      }
+      if (slide.beforeAfterImages) {
+        imageUrls.add(slide.beforeAfterImages.before)
+        imageUrls.add(slide.beforeAfterImages.after)
+      }
+    })
+    
+    totalImagesRef.current = imageUrls.size
+    
+    // If no images, set loading to false immediately
+    if (imageUrls.size === 0) {
+      setIsLoading(false)
+      return
+    }
+    
+    // Track image loading
+    const checkAllLoaded = () => {
+      if (loadedImagesRef.current.size >= totalImagesRef.current) {
+        setIsLoading(false)
+      }
+    }
+    
+    // Preload all images
+    imageUrls.forEach((url) => {
+      const img = new window.Image()
+      img.onload = () => {
+        loadedImagesRef.current.add(url)
+        checkAllLoaded()
+      }
+      img.onerror = () => {
+        // Count errors as loaded to prevent infinite loading
+        loadedImagesRef.current.add(url)
+        checkAllLoaded()
+      }
+      img.src = url
+    })
+    
+    // Fallback: set loading to false after 5 seconds max
+    const timeoutId = setTimeout(() => {
+      setIsLoading(false)
+    }, 5000)
+    
+    return () => clearTimeout(timeoutId)
+  }, [slides])
+
+  // Reset scroll position to top when component mounts or when switching to mobile
+  useEffect(() => {
+    if (isMobile && containerRef.current) {
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        if (containerRef.current) {
+          containerRef.current.scrollTop = 0
+        }
+      })
+    }
+    // Also reset desktop slide to first slide
+    setCurrentSlide(0)
+  }, [isMobile])
+
+  // Reset scroll position on initial mount - especially important for mobile
+  useEffect(() => {
+    const resetScroll = () => {
+      if (containerRef.current) {
+        containerRef.current.scrollTop = 0
+        // Also try scrolling the window itself on mobile
+        if (window.innerWidth < 768) {
+          window.scrollTo(0, 0)
+        }
+      }
+    }
+    
+    // Reset immediately
+    resetScroll()
+    
+    // Also reset after a short delay to handle any async rendering
+    const timeoutId = setTimeout(resetScroll, 100)
+    
+    // Reset when page becomes visible (handles tab switching, app reopening)
+    const handleVisibilityChange = () => {
+      if (!document.hidden && window.innerWidth < 768) {
+        resetScroll()
+      }
+    }
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    
+    setCurrentSlide(0)
+    
+    return () => {
+      clearTimeout(timeoutId)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [])
+
+  useEffect(() => {
+    // Only handle wheel events on desktop
+    if (isMobile) return
+
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault()
 
@@ -742,7 +849,7 @@ export default function CaseStudySlider({ slides }: CaseStudySliderProps) {
     return () => {
       window.removeEventListener('wheel', handleWheel)
     }
-  }, [slides.length])
+  }, [slides.length, isMobile])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -756,33 +863,73 @@ export default function CaseStudySlider({ slides }: CaseStudySliderProps) {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [currentSlide])
 
-  return (
-    <div className="case-study-container relative w-full h-screen overflow-hidden">
-      <div className="slide-indicators absolute top-2 left-0 right-0 px-4 md:left-auto md:right-6 md:top-1/2 md:-translate-y-1/2 md:fixed md:px-0 z-50 flex flex-row md:flex-col justify-between md:justify-start gap-1 md:gap-1.5">
-        {slides.map((slide, index) => (
-          <button
-            key={slide.id}
-            onClick={() => setCurrentSlide(index)}
-            className={`indicator-dot w-3 h-1.5 md:w-1.5 md:h-6 rounded-full transition-all duration-300 flex-shrink-0 ${
-              index === currentSlide ? 'bg-blue-400 w-6 h-1.5 md:w-1.5 md:h-10' : 'bg-slate-700 hover:bg-slate-600'
-            }`}
-          />
-        ))}
-      </div>
-
-      <div
-        className="slides-wrapper relative w-full h-full"
-        style={{
-          transform: `translateY(-${currentSlide * 100}vh)`,
-          transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-        }}
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div 
+        className={`case-study-container relative w-full flex items-center justify-center ${
+          isMobile ? 'h-full' : 'h-screen'
+        }`}
       >
-        {slides.map((slide, index) => (
-          <SlideContent key={slide.id} slide={slide} isActive={index === currentSlide} />
-        ))}
+        <div className="text-center">
+          <div className="text-white text-lg font-medium mb-2">Loading</div>
+          <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        </div>
       </div>
+    )
+  }
 
-      {currentSlide < slides.length - 1 && (
+  return (
+    <div 
+      ref={containerRef}
+      className={`case-study-container relative w-full ${
+        isMobile ? 'h-full overflow-y-auto overflow-x-hidden' : 'h-screen overflow-hidden'
+      }`}
+    >
+      {/* Slide indicators - only show on desktop */}
+      {!isMobile && (
+        <div className="slide-indicators absolute top-2 left-0 right-0 px-4 md:left-auto md:right-6 md:top-1/2 md:-translate-y-1/2 md:fixed md:px-0 z-50 flex flex-row md:flex-col justify-between md:justify-start gap-1 md:gap-1.5">
+          {slides.map((slide, index) => (
+            <button
+              key={slide.id}
+              onClick={() => setCurrentSlide(index)}
+              className={`indicator-dot w-3 h-1.5 md:w-1.5 md:h-6 rounded-full transition-all duration-300 flex-shrink-0 ${
+                index === currentSlide ? 'bg-blue-400 w-6 h-1.5 md:w-1.5 md:h-10' : 'bg-slate-700 hover:bg-slate-600'
+              }`}
+            />
+          ))}
+        </div>
+      )}
+
+      {isMobile ? (
+        // Mobile: Normal scroll with animations
+        <div className="slides-wrapper relative w-full py-12 md:py-16">
+          {slides.map((slide, index) => (
+            <AnimatedSection 
+              key={slide.id} 
+              className={`w-full py-12 md:py-16 ${index === slides.length - 1 ? 'pb-[3.0rem] md:pb-0' : ''}`}
+            >
+              <SlideContent slide={slide} isActive={true} isMobile={true} />
+            </AnimatedSection>
+          ))}
+        </div>
+      ) : (
+        // Desktop: Transform-based slide system
+        <div
+          className="slides-wrapper relative w-full h-full"
+          style={{
+            transform: `translateY(-${currentSlide * 100}vh)`,
+            transition: 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
+        >
+          {slides.map((slide, index) => (
+            <SlideContent key={slide.id} slide={slide} isActive={index === currentSlide} isMobile={false} />
+          ))}
+        </div>
+      )}
+
+      {/* Scroll hint - only show on desktop */}
+      {!isMobile && currentSlide < slides.length - 1 && (
         <motion.div
           className="scroll-hint fixed bottom-6 left-0 right-0 mx-auto z-40 flex flex-col items-center gap-1 text-slate-500 w-fit"
           animate={{ y: [0, 8, 0] }}

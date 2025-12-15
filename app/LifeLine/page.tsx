@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function LifeLinePage() {
   return (
     <WindowPageLayout title="LifeLine" currentPage="projects" fullScreen enableFinderModals>
-      <div className="h-full w-full overflow-hidden bg-slate-950">
+      <div className="h-full w-full overflow-hidden bg-slate-950 pb-[3.0rem] md:pb-0">
         <CaseStudySlider slides={lifelineSlides} />
       </div>
     </WindowPageLayout>

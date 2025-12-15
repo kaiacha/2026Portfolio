@@ -30,9 +30,9 @@ export default function Window({ title, children, onClose }: WindowProps) {
             '0px 25px 30px rgba(0, 0, 0, 0.35), 0px 0px 20px rgba(0, 0, 0, 0.15)',
         }}
       >
-        {/* Title Bar */}
+        {/* Title Bar - Fixed on mobile */}
         <div
-          className="h-[22px] w-full flex items-center justify-center relative px-5"
+          className="h-[22px] w-full flex items-center justify-center px-5 fixed md:relative top-0 left-0 right-0 z-50"
           style={{
             background:
               'linear-gradient(180deg, rgba(237,236,237,1) 0%, rgba(210,210,210,1) 100%)',
@@ -68,9 +68,9 @@ export default function Window({ title, children, onClose }: WindowProps) {
         </div>
 
         {/* Body */}
-        <div className="flex flex-col h-[calc(100%-22px)]">
-          <div className="flex-1 overflow-hidden">
-            <div className="h-full overflow-y-auto overflow-x-hidden">{children}</div>
+        <div className="flex flex-col h-full md:h-[calc(100%-22px)] md:pt-0">
+          <div className="flex-1 overflow-hidden md:overflow-hidden">
+            <div className="h-full overflow-hidden md:overflow-hidden overflow-x-hidden">{children}</div>
           </div>
         </div>
       </div>

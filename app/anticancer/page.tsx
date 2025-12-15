@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 import Image from 'next/image'
 import WindowPageLayout from '@/components/WindowPageLayout'
@@ -17,9 +17,13 @@ import normalizationImage from '@/src/Detail/normalize.png'
 import featureSelectionImage from '@/src/Detail/featureselection.png'
 import modelSelectionImage from '@/src/Detail/modelselection.png'
 import fullMockupImage from '@/src/Detail/fullmockup.png'
-import colorPaletteLeft from '@/src/Detail/color-left.png'
-import colorPaletteTop from '@/src/Detail/color-top.png'
-import colorPaletteBottom from '@/src/Detail/color-bottom.png'
+// Color palette images - commented out if files don't exist
+// import colorPaletteLeft from '@/src/Detail/color-left.png'
+// import colorPaletteTop from '@/src/Detail/color-top.png'
+// import colorPaletteBottom from '@/src/Detail/color-bottom.png'
+const colorPaletteLeft: any = null
+const colorPaletteTop: any = null
+const colorPaletteBottom: any = null
 import progressWheel1 from '@/src/Detail/Progress wheel1.svg'
 import progressWheel2 from '@/src/Detail/Progress wheel2.svg'
 import actualSvg from '@/src/Detail/actual.svg'
@@ -164,6 +168,83 @@ const AnimatedDiv = ({ children, className = '', delay = 0 }: { children: React.
 }
 
 export default function AnticancerPage() {
+  const [isLoading, setIsLoading] = useState(true)
+  const loadedImagesRef = useRef<Set<string>>(new Set())
+
+  // Collect all image sources (filter out null/undefined)
+  const imageSources = [
+    slide1Dashboard?.src,
+    slide2Mockup?.src,
+    mainDashImage?.src,
+    infoTabImage?.src,
+    treatmentPanelImage?.src,
+    similarCasesImage?.src,
+    aiAssessmentImage?.src,
+    doctorsNotesImage?.src,
+    preprocessingImage?.src,
+    normalizationImage?.src,
+    featureSelectionImage?.src,
+    modelSelectionImage?.src,
+    fullMockupImage?.src,
+    colorPaletteLeft && (colorPaletteLeft as any).src,
+    colorPaletteTop && (colorPaletteTop as any).src,
+    colorPaletteBottom && (colorPaletteBottom as any).src,
+    anticancerLogo?.src,
+    SLIDE_DASHBOARD,
+  ].filter(Boolean) as string[]
+
+  useEffect(() => {
+    const totalImages = imageSources.length
+    if (totalImages === 0) {
+      setIsLoading(false)
+      return
+    }
+
+    const checkAllLoaded = () => {
+      if (loadedImagesRef.current.size >= totalImages) {
+        setIsLoading(false)
+      }
+    }
+
+    imageSources.forEach((src) => {
+      if (!src) {
+        loadedImagesRef.current.add(src || '')
+        checkAllLoaded()
+        return
+      }
+      const img = new window.Image()
+      img.onload = () => {
+        loadedImagesRef.current.add(src)
+        checkAllLoaded()
+      }
+      img.onerror = () => {
+        loadedImagesRef.current.add(src)
+        checkAllLoaded()
+      }
+      img.src = src
+    })
+
+    // Fallback timeout
+    const timeoutId = setTimeout(() => {
+      setIsLoading(false)
+    }, 5000)
+
+    return () => clearTimeout(timeoutId)
+  }, [])
+
+  if (isLoading) {
+    return (
+      <WindowPageLayout title="Anticancer" currentPage="projects" fullScreen enableFinderModals>
+        <div className="h-full w-full flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-white text-lg font-medium mb-2">Loading</div>
+            <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          </div>
+        </div>
+      </WindowPageLayout>
+    )
+  }
+
   return (
     <WindowPageLayout title="Anticancer" currentPage="projects" fullScreen enableFinderModals>
       <article className="h-full w-full max-w-full overflow-y-auto overflow-x-hidden pb-10 ">
