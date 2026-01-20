@@ -47,9 +47,8 @@ export default function WindowPageLayout({
     if (!enableFinderModals) return {}
     return {
       onFolderClick: openProjects,
-      onSafariClick: openVolunteering,
     }
-  }, [enableFinderModals, openProjects, openVolunteering])
+  }, [enableFinderModals, openProjects])
 
   // When window is open, hide dock and topbar, so use full screen
   const contentPaddingTop = 10

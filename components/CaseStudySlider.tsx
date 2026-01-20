@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 
@@ -681,6 +681,8 @@ export default function CaseStudySlider({ slides }: CaseStudySliderProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [isTocOpen, setIsTocOpen] = useState(false)
+  const [tocHoverIndex, setTocHoverIndex] = useState<number | null>(null)
   const scrollLockRef = useRef(false)
   const lastScrollTimeRef = useRef(0)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -888,16 +890,68 @@ export default function CaseStudySlider({ slides }: CaseStudySliderProps) {
     >
       {/* Slide indicators - only show on desktop */}
       {!isMobile && (
-        <div className="slide-indicators absolute top-2 left-0 right-0 px-4 md:left-auto md:right-6 md:top-1/2 md:-translate-y-1/2 md:fixed md:px-0 z-50 flex flex-row md:flex-col justify-between md:justify-start gap-1 md:gap-1.5">
+        <div
+          className="slide-indicators group absolute top-2 left-0 right-0 px-4 md:left-auto md:right-6 md:top-1/2 md:-translate-y-1/2 md:fixed md:px-0 z-50 flex flex-row md:flex-col justify-between md:justify-start gap-1 md:gap-1.5"
+          onMouseEnter={() => setIsTocOpen(true)}
+          onMouseLeave={() => {
+            setIsTocOpen(false)
+            setTocHoverIndex(null)
+          }}
+        >
           {slides.map((slide, index) => (
             <button
               key={slide.id}
               onClick={() => setCurrentSlide(index)}
+              onMouseEnter={() => setTocHoverIndex(index)}
               className={`indicator-dot w-3 h-1.5 md:w-1.5 md:h-6 rounded-full transition-all duration-300 flex-shrink-0 ${
                 index === currentSlide ? 'bg-blue-400 w-6 h-1.5 md:w-1.5 md:h-10' : 'bg-slate-700 hover:bg-slate-600'
               }`}
+              aria-label={`Go to ${slide.title || slide.tag || slide.id}`}
+              title={slide.title || slide.tag || slide.id}
             />
           ))}
+          <AnimatePresence>
+            {isTocOpen && slides.some((s) => s.title) && (
+              <motion.div
+                initial={{ opacity: 0, x: 8 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 8 }}
+                transition={{ duration: 0.18, ease: 'easeOut' }}
+                className="hidden md:block fixed right-12 top-[0%] -translate-y-1/2 z-50"
+              >
+                <div className="w-[260px] rounded-2xl border border-white/10 bg-slate-900/80 backdrop-blur px-3 py-2.5 shadow-2xl">
+                  <p className="px-2 pb-1.5 text-[10px] font-medium text-slate-300/80 uppercase tracking-wider">On this page</p>
+                  <div className="max-h-[80vh] overflow-auto pr-1">
+                    <ul className="space-y-0.5">
+                      {slides.map((s, i) => {
+                        const label = s.title || s.tag || `Section ${i + 1}`
+                        const active = i === currentSlide
+                        const hovering = tocHoverIndex === i
+                        return (
+                          <li key={s.id}>
+                            <button
+                              type="button"
+                              onClick={() => setCurrentSlide(i)}
+                              className={`w-full text-left flex items-center gap-2 rounded-lg px-2 py-1.5 transition ${
+                                active
+                                  ? 'bg-blue-500/15 text-blue-200'
+                                  : hovering
+                                  ? 'bg-white/5 text-slate-100'
+                                  : 'text-slate-200/80 hover:bg-white/5 hover:text-slate-100'
+                              }`}
+                            >
+                              <span className={`h-1.5 w-1.5 rounded-full ${active ? 'bg-blue-400' : 'bg-slate-600'}`} />
+                              <span className="truncate text-[13px] leading-snug">{label}</span>
+                            </button>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                  </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       )}
 

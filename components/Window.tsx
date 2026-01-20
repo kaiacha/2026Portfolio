@@ -70,7 +70,7 @@ export default function Window({ title, children, onClose }: WindowProps) {
         {/* Body */}
         <div className="flex flex-col h-full md:h-[calc(100%-22px)] md:pt-0">
           <div className="flex-1 overflow-hidden md:overflow-hidden">
-            <div className="h-full overflow-hidden md:overflow-hidden overflow-x-hidden">{children}</div>
+            <div className="h-full overflow-y-auto overflow-x-hidden">{children}</div>
           </div>
         </div>
       </div>

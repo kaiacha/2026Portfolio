@@ -8,6 +8,11 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -16,10 +21,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: #0a0a0a;
   color: #ffffff;
-  overflow-x: hidden;
 }
 
 @layer utilities {
+  /* Accent Color System */
+  :root {
+    --accent-primary: #2563eb; /* Blue - for name, CTAs, links, active states */
+    --accent-lifeline: #3b82f6; /* Blue - Emergency/System UX */
+    --accent-anticancer: #f87171; /* Coral/Red - Healthcare */
+    --accent-koddiz: #f59e0b; /* Amber - Education */
+  }
+
   .glass-effect {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(20px);
@@ -32,6 +44,15 @@ body {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* De-highlighted glass effect for decorative widgets */
+  .glass-effect-muted {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    opacity: 0.85;
   }
 
   .tapbar-indicator {

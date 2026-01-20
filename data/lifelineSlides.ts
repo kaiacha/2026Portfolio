@@ -37,13 +37,6 @@ export interface LifelineSlide {
 
 export const lifelineSlides: LifelineSlide[] = [
   {
-    id: 'dashboard-live',
-    layout: 'dashboard-full',
-    component: NavigatorDashboard,
-    image: '/images/NavigatorDashboard.png',
-    imageAlt: 'Navigator Dashboard - Mobile View',
-  },
-  {
     id: 'overview',
     tag: 'Project Overview',
     title: 'Emergency Medical Drone System',
@@ -88,6 +81,13 @@ export const lifelineSlides: LifelineSlide[] = [
         </div>
       </div>
     `,
+  },
+  {
+    id: 'dashboard-live',
+    layout: 'dashboard-full',
+    component: NavigatorDashboard,
+    image: '/images/NavigatorDashboard.png',
+    imageAlt: 'Navigator Dashboard - Mobile View',
   },
   {
     id: 'context',

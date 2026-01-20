@@ -1,18 +1,17 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import homeIcon from '@/src/icons/Home.png'
 import profileIcon from '@/src/icons/ProfileIcon.png'
 import folderIcon from '@/src/icons/Folder.png'
-import compassIcon from '@/src/icons/compress.png'
 import mailIcon from '@/src/icons/email.png'
 import linkedinIcon from '@/src/icons/linkedin.png'
 
 interface DockItem {
-  id: 'home' | 'profile' | 'projects' | 'volunteering' | 'linkedin' | 'mail'
+  id: 'home' | 'profile' | 'projects' | 'linkedin' | 'mail'
   name: string
   icon: string
   href?: string
@@ -22,19 +21,20 @@ interface DockItem {
 
 interface DockProps {
   onFolderClick?: () => void
-  onSafariClick?: () => void
   isFolderActive?: boolean
-  isSafariActive?: boolean
 }
 
 export default function Dock({
   onFolderClick,
-  onSafariClick,
   isFolderActive = false,
-  isSafariActive = false,
 }: DockProps) {
   const pathname = usePathname() ?? ''
+  const [isMounted, setIsMounted] = useState(false)
   const email = 'mikyocha@asu.edu'
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const handleMailClick = () => {
     window.location.href = `mailto:${email}`
@@ -42,9 +42,8 @@ export default function Dock({
 
   const dockItems: DockItem[] = [
     { id: 'home', name: 'Home', icon: '🏠', href: '/' },
-    { id: 'profile', name: 'Profile', icon: '👤', href: '/profile' },
+    { id: 'profile', name: 'Profile', icon: '👤', href: '/about' },
     { id: 'projects', name: 'Folder', icon: '📁', action: onFolderClick },
-    { id: 'volunteering', name: 'Safari', icon: '🧭', action: onSafariClick },
     { id: 'linkedin', name: 'LinkedIn', icon: '💼', externalHref: 'https://www.linkedin.com/in/mikyocha/' },
     { id: 'mail', name: 'Mail', icon: '✉️', action: handleMailClick },
   ]
@@ -52,7 +51,7 @@ export default function Dock({
   return (
     <div className="fixed left-[3px] right-[3px] bottom-[3px] z-50 flex justify-center md:left-1/2 md:right-auto md:bottom-6 md:transform md:-translate-x-1/2">
       <div 
-        className="rounded-[30px] px-3 sm:px-4 md:px-5 py-3 md:py-4 flex items-center gap-2 sm:gap-2.5 md:gap-3 shadow-2xl relative overflow-hidden"
+        className="rounded-[26.46px] px-3 sm:px-4 md:px-5 py-3 md:py-4 flex items-center gap-2 sm:gap-2.5 md:gap-3 shadow-2xl relative overflow-hidden"
         style={{
           background: 'rgba(30, 30, 30, 0.7)',
           backdropFilter: 'blur(40px) saturate(180%)',
@@ -91,14 +90,12 @@ export default function Dock({
 
         <div className="relative z-10 flex items-center gap-2 sm:gap-2.5 md:gap-3">
           {dockItems.map((item) => {
-            const isRouteActive = item.href
+            const isRouteActive = isMounted && item.href
               ? pathname === item.href || pathname.startsWith(`${item.href}/`)
               : false
             const isModalActive =
-              (item.id === 'projects' && isFolderActive) ||
-              (item.id === 'volunteering' && isSafariActive)
+              (item.id === 'projects' && isFolderActive)
             const isActive = isRouteActive || isModalActive
-            const isSafari = item.id === 'volunteering'
 
             const isInteractive = Boolean(item.href || item.externalHref || item.action)
 
@@ -113,10 +110,6 @@ export default function Dock({
               iconContent = (
                 <Image src={folderIcon} alt="Projects" width={35} height={30} className="w-[28px] h-[24px] sm:w-[32px] sm:h-[27px] md:w-[35px] md:h-[30px]" priority />
               )
-            } else if (item.id === 'volunteering') {
-              iconContent = (
-                <Image src={compassIcon} alt="Volunteering" width={35} height={30} className="w-[28px] sm:w-[32px] ] md:w-[35px]" priority />
-              )
             } else if (item.id === 'linkedin') {
               iconContent = <Image src={linkedinIcon} alt="LinkedIn" width={35} height={30} className="w-[28px] sm:w-[32px] ] md:w-[35px]" priority />
             } else if (item.id === 'mail') {
@@ -126,7 +119,7 @@ export default function Dock({
             }
 
             const backgroundStyle = (() => {
-              if (['home', 'profile', 'projects', 'volunteering'].includes(item.id)) {
+              if (['home', 'profile', 'projects'].includes(item.id)) {
                 return { background: 'linear-gradient(180deg, #FFFFFF 0%, #b5b5b5 100%)' }
               }
               if (item.id === 'mail') {
@@ -142,11 +135,17 @@ export default function Dock({
               <div
                 className={`relative w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl bg-white/90 flex items-center justify-center overflow-hidden ${
                   isInteractive ? 'cursor-pointer hover:scale-110 transition-transform duration-200' : 'cursor-default'
-                } shadow-lg ${
-                  isActive ? 'ring-2 ring-blue-400 ring-offset-2 ring-offset-white dock-icon-active' : ''
+                } shadow-lg transition-all duration-300 ${
+                  isActive ? 'ring-2 ring-offset-2 ring-offset-white dock-icon-active' : ''
                 }`}
                 title={item.name}
-                style={backgroundStyle}
+                style={{
+                  ...backgroundStyle,
+                  ...(isActive ? {
+                    ringColor: 'var(--accent-primary)',
+                    boxShadow: '0 0 0 2px var(--accent-primary), 0 4px 12px rgba(37, 99, 235, 0.3)',
+                  } : {}),
+                }}
               >
                 {iconContent}
               </div>
@@ -181,16 +180,7 @@ export default function Dock({
                  </button>
                )
              }
- 
-             if (isSafari) {
-               return (
-                 <React.Fragment key={item.id}>
-                   {itemElement}
-                   <div className="h-8 w-px bg-white/20" />
-                 </React.Fragment>
-               )
-             }
- 
+
              return (
                <React.Fragment key={item.id}>
                  {itemElement}

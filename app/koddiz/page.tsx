@@ -1,4 +1,7 @@
-import type { Metadata } from 'next'
+'use client'
+
+import React, { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import WindowPageLayout from '@/components/WindowPageLayout'
 import ResearchFlowDiagram from '@/components/koddiz/ResearchFlowDiagram'
@@ -60,64 +63,165 @@ import slide19_compo from '@/src/KoddizImage/slide19_compo.png'
 
 const SLIDE2_TAGS = ['Social', 'Community', 'Global', 'Meetups', 'Chats', 'Mobile App']
 
-export const metadata: Metadata = {
-  title: 'Koddiz | Mikyo Kaia Cha',
-  description: 'Koddiz social companion concept designed by Mikyo Kaia Cha.',
-}
+const KODDIZ_SECTION_TOC = [
+  { id: 'koddiz-hero', label: 'Overview' },
+  { id: 'overview-summary', label: 'Project Summary' },
+  { id: 'app-showcase', label: 'App Screens' },
+  { id: 'user-flow', label: 'User Flow' },
+  { id: 'project-goal', label: 'Project Goal & Pain Points' },
+  { id: 'research-01', label: 'Painpoint 01 & Research' },
+  { id: 'solution-01', label: 'Solution 01 · Meetups' },
+  { id: 'mission-page', label: 'Creating Mission Page' },
+  { id: 'join-chat-flow', label: 'Join Chat & Pre-Meet' },
+  { id: 'painpoint-02', label: 'Painpoint 02 · Language' },
+  { id: 'solution-02', label: 'Solution 02 · Moments & Chat' },
+  { id: 'moments-reply', label: 'Moments Reply & Posting' },
+  { id: 'chat-and-updates', label: 'Chat & Event Updates' },
+  { id: 'profiles', label: 'Profiles' },
+  { id: 'painpoint-03', label: 'Painpoint 03 · Safety' },
+]
+
 
 export default function KoddizPage() {
+  const [activeSectionId, setActiveSectionId] = useState<string>(KODDIZ_SECTION_TOC[0]?.id || '')
+  const [isTocOpen, setIsTocOpen] = useState(false)
+  const [tocHoverId, setTocHoverId] = useState<string | null>(null)
+  const scrollContainerRef = useRef<HTMLElement | null>(null)
+
+  useEffect(() => {
+    const rootEl = scrollContainerRef.current
+    if (!rootEl) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => (b.intersectionRatio || 0) - (a.intersectionRatio || 0))
+
+        if (visible[0]?.target?.id) {
+          setActiveSectionId(visible[0].target.id)
+        }
+      },
+      {
+        root: rootEl,
+        threshold: [0.2, 0.35, 0.5],
+        rootMargin: '-10% 0px -70% 0px',
+      }
+    )
+
+    KODDIZ_SECTION_TOC.forEach((section) => {
+      const el = document.getElementById(section.id)
+      if (el) observer.observe(el)
+    })
+
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <WindowPageLayout title="Koddiz" currentPage="projects" fullScreen enableFinderModals>
-      <article className="h-full w-full max-w-full overflow-y-auto overflow-x-hidden pb-10">
-        {/* Slide 1 – App showcase */}
-        <ScrollAnimation>
-          <section className="bg-[#FF6471] px-6 py-12 text-[#232323] md:px-10 lg:px-16 xl:px-20">
-          <div className="mx-auto w-full max-w-6xl">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6">
-              <div className="relative w-full aspect-[9/16] overflow-hidden rounded-2xl">
-                <Image
-                  src={koddizMain1}
-                  alt="Koddiz Home Screen"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
-              <div className="relative w-full aspect-[9/16] overflow-hidden rounded-2xl">
-                <Image
-                  src={koddizMain2}
-                  alt="Koddiz Event Detail Screen"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
-              <div className="relative w-full aspect-[9/16] overflow-hidden rounded-2xl">
-                <Image
-                  src={koddizMain3}
-                  alt="Koddiz Moments Feed"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
-              <div className="relative w-full aspect-[9/16] overflow-hidden rounded-2xl">
-                <Image
-                  src={koddizMain4}
-                  alt="Koddiz Chat Screen"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-        </ScrollAnimation>
+      {/* Right-side slide indicator + hover TOC (desktop only) */}
+      <div
+        className="hidden md:flex fixed right-6 top-1/2 -translate-y-1/2 z-50 flex-col items-center gap-2"
+        onMouseEnter={() => setIsTocOpen(true)}
+        onMouseLeave={() => {
+          setIsTocOpen(false)
+          setTocHoverId(null)
+        }}
+      >
+        {/* Vertical indicator dots */}
+        <div className="flex flex-col items-center gap-1 rounded-full bg-slate-900/70 px-2 py-3 shadow-lg backdrop-blur">
+          {KODDIZ_SECTION_TOC.map((section) => {
+            const isActive = section.id === activeSectionId
+            return (
+              <button
+                key={section.id}
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById(section.id)
+                  if (el && scrollContainerRef.current) {
+                    scrollContainerRef.current.scrollTo({
+                      top: el.offsetTop,
+                      behavior: 'smooth',
+                    })
+                  }
+                }}
+                onMouseEnter={() => setTocHoverId(section.id)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  isActive ? 'bg-blue-400 h-4' : 'bg-slate-600 hover:bg-slate-400'
+                }`}
+                aria-label={section.label}
+              />
+            )
+          })}
+        </div>
 
+        {/* Hover TOC panel */}
+        <AnimatePresence>
+          {isTocOpen && (
+            <motion.div
+              initial={{ opacity: 0, x: 8 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 8 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+              className="hidden md:block fixed right-14 -top-[60%] z-50"
+            >
+              <div className="w-[260px] rounded-2xl border border-white/10 bg-slate-900/80 backdrop-blur px-3 py-2.5 shadow-2xl">
+                <p className="px-2 pb-1.5 text-[10px] font-medium text-slate-300/80 uppercase tracking-wider">
+                  On this page
+                </p>
+                <div className="max-h-[80vh] overflow-auto pr-1">
+                  <ul className="space-y-0.5">
+                    {KODDIZ_SECTION_TOC.map((section) => {
+                      const active = section.id === activeSectionId
+                      const hovering = tocHoverId === section.id
+                      return (
+                        <li key={section.id}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const el = document.getElementById(section.id)
+                              if (el && scrollContainerRef.current) {
+                                scrollContainerRef.current.scrollTo({
+                                  top: el.offsetTop,
+                                  behavior: 'smooth',
+                                })
+                              }
+                            }}
+                            className={`w-full text-left flex items-center gap-2 rounded-lg px-2 py-1.5 transition ${
+                              active
+                                ? 'bg-blue-500/15 text-blue-200'
+                                : hovering
+                                ? 'bg-white/5 text-slate-100'
+                                : 'text-slate-200/80 hover:bg-white/5 hover:text-slate-100'
+                            }`}
+                          >
+                            <span
+                              className={`h-1.5 w-1.5 rounded-full ${
+                                active ? 'bg-blue-400' : 'bg-slate-600'
+                              }`}
+                            />
+                            <span className="truncate text-[13px] leading-snug">{section.label}</span>
+                          </button>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+      <article
+        ref={scrollContainerRef}
+        className="h-full w-full max-w-full overflow-y-auto overflow-x-hidden pb-10"
+      >
         {/* Slide 2 – Narrative hero */}
         <ScrollAnimation>
-          <section className="relative px-6 pt-12 pb-12 md:pt-28 md:pb-28 text-[#232323] md:px-10 lg:px-16 xl:px-20 overflow-hidden">
+          <section
+            id="koddiz-hero"
+            className="relative px-6 pt-12 pb-12 md:pt-28 md:pb-28 text-[#232323] md:px-10 lg:px-16 xl:px-20 overflow-hidden"
+          >
           <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-stretch">
             {/* Large background text */}
             <div 
@@ -175,7 +279,10 @@ export default function KoddizPage() {
 
         {/* Slide 3 – Overview summary */}
         <ScrollAnimation>
-          <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-24 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+          <section
+            id="overview-summary"
+            className="px-6 pt-12 pb-12 md:pt-28 md:pb-24 text-[#232323] md:px-10 lg:px-16 xl:px-20"
+          >
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-start">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#232323]/60">Korddiz</span>
@@ -245,9 +352,61 @@ export default function KoddizPage() {
         </section>
         </ScrollAnimation>
 
+        {/* Slide 1 – App showcase */}
+        <ScrollAnimation>
+          <section
+            id="app-showcase"
+            className="bg-[#FF6471] px-6 py-12 text-[#232323] md:px-10 lg:px-16 xl:px-20"
+          >
+          <div className="mx-auto w-full max-w-6xl">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6">
+              <div className="relative w-full aspect-[9/16] overflow-hidden rounded-2xl">
+                <Image
+                  src={koddizMain1}
+                  alt="Koddiz Home Screen"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <div className="relative w-full aspect-[9/16] overflow-hidden rounded-2xl">
+                <Image
+                  src={koddizMain2}
+                  alt="Koddiz Event Detail Screen"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <div className="relative w-full aspect-[9/16] overflow-hidden rounded-2xl">
+                <Image
+                  src={koddizMain3}
+                  alt="Koddiz Moments Feed"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <div className="relative w-full aspect-[9/16] overflow-hidden rounded-2xl">
+                <Image
+                  src={koddizMain4}
+                  alt="Koddiz Chat Screen"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+        </ScrollAnimation>
+
         {/* Slide 4 – Simple User Flow / Information Architecture */}
         <ScrollAnimation>
-          <section className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 md:px-10 lg:px-16 xl:px-20 bg-white">
+          <section
+            id="user-flow"
+            className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 md:px-10 lg:px-16 xl:px-20 bg-white"
+          >
           <div className="mx-auto max-w-6xl">
             <header className="space-y-2 mb-8 md:mb-12">
               <span className="text-xs uppercase tracking-[0.35em] text-[#232323]/60">User Flow</span>
@@ -438,7 +597,10 @@ export default function KoddizPage() {
 
         {/* Slide 5 – Project Goal & Pain Points */}
         <ScrollAnimation>
-          <section className="relative px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-gradient-to-b from-[#972a33] from-[5.906%] to-[#ff6471] text-white overflow-hidden">
+          <section
+            id="project-goal"
+            className="relative px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-gradient-to-b from-[#972a33] from-[5.906%] to-[#ff6471] text-white overflow-hidden"
+          >
           <div className="mx-auto max-w-6xl w-full">
             {/* Project Goal */}
             <div className="mb-8 md:mb-12">
@@ -487,7 +649,10 @@ export default function KoddizPage() {
 
         {/* Slide 6 – Pain Point & Research */}
         <ScrollAnimation>
-          <section className="px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-white text-[#232323]">
+          <section
+            id="research-01"
+            className="px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-white text-[#232323]"
+          >
           <div className="mx-auto max-w-7xl w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
               {/* Left Section: Painpoint 01 */}
@@ -670,7 +835,10 @@ export default function KoddizPage() {
 
         {/* Slide 7 – Solution 01 */}
         <ScrollAnimation>
-          <section className="relative bg-white text-[#232323] overflow-hidden">
+          <section
+            id="solution-01"
+            className="relative bg-white text-[#232323] overflow-hidden"
+          >
           {/* Red Banner at Top */}
           <div className="bg-[#FF6471] px-6 md:px-10 lg:px-16 xl:px-20 pt-8 pb-6 md:pt-12 md:pb-8">
             <div className="mx-auto max-w-6xl">
@@ -733,7 +901,10 @@ export default function KoddizPage() {
 
         {/* Slide 8 – Creating Mission Page */}
         <ScrollAnimation>
-          <section className="relative bg-white text-[#232323] overflow-hidden">
+          <section
+            id="mission-page"
+            className="relative bg-white text-[#232323] overflow-hidden"
+          >
           {/* Content Section */}
           <div className="px-6 py-12 md:py-16 md:px-10 lg:px-16 xl:px-20">
             <div className="mx-auto max-w-6xl">
@@ -782,7 +953,10 @@ export default function KoddizPage() {
 
         {/* Slide 9 – Join Chat Flow */}
         <ScrollAnimation>
-          <section className="relative bg-white text-[#232323] overflow-hidden">
+          <section
+            id="join-chat-flow"
+            className="relative bg-white text-[#232323] overflow-hidden"
+          >
           {/* Content Section */}
           <div className="px-6 py-12 md:py-16 md:px-10 lg:px-16 xl:px-20">
             <div className="mx-auto max-w-6xl">
@@ -845,7 +1019,10 @@ export default function KoddizPage() {
 
         {/* Slide 10 – Painpoint 02 */}
         <ScrollAnimation>
-          <section className="px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-white text-[#232323]">
+          <section
+            id="painpoint-02"
+            className="px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-white text-[#232323]"
+          >
           <div className="mx-auto max-w-7xl w-full">
             {/* Header */}
             <div className="mb-8 md:mb-12">
@@ -1069,7 +1246,10 @@ export default function KoddizPage() {
 
         {/* Slide 11 – Solution 02: Moments Feed */}
         <ScrollAnimation>
-          <section className="relative bg-white text-[#232323] overflow-hidden">
+          <section
+            id="solution-02"
+            className="relative bg-white text-[#232323] overflow-hidden"
+          >
           {/* Red Banner at Top */}
           <div className="bg-[#FF6471] px-6 md:px-10 lg:px-16 xl:px-20 pt-8 pb-6 md:pt-12 md:pb-8">
             <div className="mx-auto max-w-6xl">
@@ -1125,7 +1305,10 @@ export default function KoddizPage() {
 
         {/* Slide 12 – Moments Reply Feed & Posting */}
         <ScrollAnimation>
-          <section className="px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-white text-[#232323]">
+          <section
+            id="moments-reply"
+            className="px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-white text-[#232323]"
+          >
           <div className="mx-auto max-w-6xl w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start">
                 {/* Left: Moments Reply Feed Description */}
@@ -1165,7 +1348,10 @@ export default function KoddizPage() {
 
         {/* Slide 13 – Chat Home Screen & Event Schedule Updates */}
         <ScrollAnimation>
-          <section className="px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-white text-[#232323]">
+          <section
+            id="chat-and-updates"
+            className="px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-white text-[#232323]"
+          >
           <div className="mx-auto max-w-6xl w-full">
             {/* Top Section: Chat Home Screen */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start mb-12 md:mb-16">
@@ -1224,7 +1410,10 @@ export default function KoddizPage() {
 
         {/* Slide 14 – Profiles */}
         <ScrollAnimation>
-          <section className="px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-white text-[#232323]">
+          <section
+            id="profiles"
+            className="px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-white text-[#232323]"
+          >
           <div className="mx-auto max-w-6xl w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start">
               {/* Left: Profiles Description */}
@@ -1263,7 +1452,10 @@ export default function KoddizPage() {
 
         {/* Slide 15 – Painpoint 03: Safety Concerns */}
         <ScrollAnimation>
-          <section className="px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-white text-[#232323]">
+          <section
+            id="painpoint-03"
+            className="px-6 py-12 md:py-20 md:px-10 lg:px-16 xl:px-20 bg-white text-[#232323]"
+          >
           <div className="mx-auto max-w-7xl w-full">
             {/* Header */}
             <div className="mb-8 md:mb-12">

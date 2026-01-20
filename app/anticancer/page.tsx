@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef, useState, useEffect } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import WindowPageLayout from '@/components/WindowPageLayout'
 import slide1Dashboard from '@/src/Detail/Dashboard.png'
@@ -132,13 +132,22 @@ const WORKFLOW_STEPS = [
 ]
 
 // Animated section wrapper component
-const AnimatedSection = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => {
+const AnimatedSection = ({
+  children,
+  className = '',
+  id,
+}: {
+  children: React.ReactNode
+  className?: string
+  id?: string
+}) => {
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
 
   return (
     <motion.section
       ref={ref}
+      id={id}
       className={className}
       initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
@@ -148,6 +157,25 @@ const AnimatedSection = ({ children, className = '' }: { children: React.ReactNo
     </motion.section>
   )
 }
+const SECTION_TOC = [
+  { id: 'overview-hero', label: 'Overview' },
+  { id: 'overview-summary', label: 'Project Summary' },
+  { id: 'overview-dashboard', label: 'Dashboard Overview' },
+  { id: 'background-01', label: 'Background 01 · Patient Understanding' },
+  { id: 'background-02', label: 'Background 02 · AI & Doctors' },
+  { id: 'workflow', label: "Doctor's Workflow" },
+  { id: 'main-dashboard', label: 'Main Dashboard' },
+  { id: 'patient-dashboard', label: 'Patient Dashboard' },
+  { id: 'patient-overview', label: 'Patient Overview Panel' },
+  { id: 'treatment-solutions', label: 'Treatment Solutions' },
+  { id: 'similar-cases', label: 'Similar Patient Cases' },
+  { id: 'ai-assessment', label: 'AI Assessment Notes' },
+  { id: 'doctors-notes', label: "Doctor's Notes" },
+  { id: 'technical-approach', label: 'Technical Approach' },
+  { id: 'model-development', label: 'Model Development' },
+  { id: 'final-ui', label: 'Final UI' },
+  { id: 'color-system', label: 'Color System' },
+]
 
 // Animated div wrapper for inner content
 const AnimatedDiv = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
@@ -170,6 +198,40 @@ const AnimatedDiv = ({ children, className = '', delay = 0 }: { children: React.
 export default function AnticancerPage() {
   const [isLoading, setIsLoading] = useState(true)
   const loadedImagesRef = useRef<Set<string>>(new Set())
+  const scrollContainerRef = useRef<HTMLElement | null>(null)
+  const [activeSectionId, setActiveSectionId] = useState<string>(SECTION_TOC[0]?.id || '')
+  const [isTocOpen, setIsTocOpen] = useState(false)
+  const [tocHoverId, setTocHoverId] = useState<string | null>(null)
+  useEffect(() => {
+    // The case study page scrolls inside the <article>, so the observer must use it as the root.
+    const rootEl = scrollContainerRef.current
+    if (!rootEl) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => (b.intersectionRatio || 0) - (a.intersectionRatio || 0))
+
+        if (visible[0]?.target?.id) {
+          setActiveSectionId(visible[0].target.id)
+        }
+      },
+      {
+        root: rootEl,
+        threshold: [0.15, 0.3, 0.45, 0.6],
+        // Bias toward the section near the top of the scroll container
+        rootMargin: '-10% 0px -70% 0px',
+      }
+    )
+
+    SECTION_TOC.forEach((section) => {
+      const el = document.getElementById(section.id)
+      if (el) observer.observe(el)
+    })
+
+    return () => observer.disconnect()
+  }, [isLoading])
 
   // Collect all image sources (filter out null/undefined)
   const imageSources = [
@@ -247,25 +309,91 @@ export default function AnticancerPage() {
 
   return (
     <WindowPageLayout title="Anticancer" currentPage="projects" fullScreen enableFinderModals>
-      <article className="h-full w-full max-w-full overflow-y-auto overflow-x-hidden pb-10 ">
-        {/* Slide 1 – dashboard showcase */}
-        <AnimatedSection className="px-6 pt-12 text-black md:px-10 lg:px-16 xl:px-20">
-          <div className="mx-auto max-w-4xl ">
-            <div className="relative w-full overflow-hidden">
-              <Image
-                src={slide1Dashboard}
-                alt="Anticancer dashboard overview"
-                width={2048}
-                height={1152}
-                className="h-auto w-full object-cover"
-                priority
+      {/* Right-side slide indicator + hover TOC (desktop only) */}
+      <div
+        className="hidden md:flex fixed right-6 top-1/2 -translate-y-1/2 z-50 flex-col items-center gap-2"
+        onMouseEnter={() => setIsTocOpen(true)}
+        onMouseLeave={() => {
+          setIsTocOpen(false)
+          setTocHoverId(null)
+        }}
+      >
+        <div className="flex flex-col items-center gap-1 rounded-full bg-slate-900/70 px-2 py-3 shadow-lg backdrop-blur">
+          {SECTION_TOC.map((section) => {
+            const isActive = section.id === activeSectionId
+            return (
+              <button
+                key={section.id}
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById(section.id)
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  }
+                }}
+                onMouseEnter={() => setTocHoverId(section.id)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  isActive
+                    ? 'bg-blue-400 h-4'
+                    : 'bg-slate-600 hover:bg-slate-400'
+                }`}
+                aria-label={section.label}
               />
-            </div>
-          </div>
-        </AnimatedSection>
+            )
+          })}
+        </div>
 
+        <AnimatePresence>
+          {isTocOpen && (
+            <motion.div
+              initial={{ opacity: 0, x: 8 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 8 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+              className="hidden md:block fixed right-10 -top-[60%] z-50"
+            >
+              <div className="w-[260px] rounded-2xl border border-white/10 bg-slate-900/80 backdrop-blur px-3 py-2.5 shadow-2xl">
+                <p className="px-2 pb-1.5 text-[10px] font-medium text-slate-300/80 uppercase tracking-wider">On this page</p>
+                <div className="max-h-[80vh] overflow-auto pr-1">
+                  <ul className="space-y-0.5">
+                    {SECTION_TOC.map((section) => {
+                      const active = section.id === activeSectionId
+                      const hovering = tocHoverId === section.id
+                      return (
+                        <li key={section.id}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const el = document.getElementById(section.id)
+                              if (el) {
+                                el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                              }
+                            }}
+                            className={`w-full text-left flex items-center gap-2 rounded-lg px-2 py-1.5 transition ${
+                              active
+                                ? 'bg-blue-500/15 text-blue-200'
+                                : hovering
+                                ? 'bg-white/5 text-slate-100'
+                                : 'text-slate-200/80 hover:bg-white/5 hover:text-slate-100'
+                            }`}
+                          >
+                            <span className={`h-1.5 w-1.5 rounded-full ${active ? 'bg-blue-400' : 'bg-slate-600'}`} />
+                            <span className="truncate text-[13px] leading-snug">{section.label}</span>
+                          </button>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <article ref={scrollContainerRef as any} className="h-full w-full max-w-full overflow-y-auto overflow-x-hidden pb-10 ">
         {/* Slide 2 – narrative hero */}
-        <AnimatedSection className="px-6 pt-12 md:pt-28 text-black md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="overview-hero" className="px-6 pt-12 md:pt-28 text-black md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 space-y-4 md:space-y-6 text-black">
               <div className="text-xs uppercase tracking-[0.35em] text-black/60">Medical Dashboard</div>
@@ -306,7 +434,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 3 – overview summary */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-24 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="overview-summary" className="px-6 pt-12 pb-12 md:pt-28 md:pb-24 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-start">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#C0C0C0]">Overview</span>
@@ -353,8 +481,24 @@ export default function AnticancerPage() {
           </div>
         </AnimatedSection>
 
+        {/* Slide 1 – dashboard showcase */}
+        <AnimatedSection id="overview-dashboard" className="px-6 pt-12 text-black md:px-10 lg:px-16 xl:px-20">
+          <div className="mx-auto max-w-4xl ">
+            <div className="relative w-full overflow-hidden">
+              <Image
+                src={slide1Dashboard}
+                alt="Anticancer dashboard overview"
+                width={2048}
+                height={1152}
+                className="h-auto w-full object-cover"
+                priority
+              />
+            </div>
+          </div>
+        </AnimatedSection>
+
         {/* Slide 4 – Background 01 */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="background-01" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl space-y-6 md:space-y-10">
             <div className="space-y-2 md:space-y-3">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Background 01</span>
@@ -447,7 +591,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 5 – Background 02 */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="background-02" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl space-y-6 md:space-y-10">
             <div className="space-y-2 md:space-y-3">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Background 02</span>
@@ -572,7 +716,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 6 – Doctor workflow */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="workflow" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl rounded-[32px] bg-gradient-to-br from-[#7EA9FF] via-[#6C88FF] to-[#4E6ADB] p-6 md:p-8 text-white shadow-[0_40px_120px_rgba(78,106,219,0.35)]">
             <header className="space-y-2">
               <span className="text-xs uppercase tracking-[0.35em] text-white/80">Workflow</span>
@@ -616,7 +760,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 7 – Main Dashboard Spotlight */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="main-dashboard" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Main Dashboard</span>
@@ -653,7 +797,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 8 – Patient dashboard view */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="patient-dashboard" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-start">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Patient Dashboard</span>
@@ -687,7 +831,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 9 – Patient overview panel */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="patient-overview" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 order-2 lg:order-1">
               <div className="mx-auto w-full p-3 bg-white max-w-[160px] overflow-hidden border rounded-[16px] border-[#ECEFF8] bg-white shadow-[0_20px_60px_rgba(78,106,219,0.55)]">
@@ -728,7 +872,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 10 – Personalized treatment solutions */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="treatment-solutions" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">
@@ -782,7 +926,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 11 – Similar patient cases */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="similar-cases" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">4. Comparing Similar Cases</span>
@@ -831,7 +975,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 12 – AI Assessment Notes */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="ai-assessment" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">5. AI-Assisted Clinical Insights</span>
@@ -882,7 +1026,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 13 – Doctor's Notes */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="doctors-notes" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 md:gap-12 lg:flex-row lg:items-center">
             <div className="flex-1 space-y-4 md:space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">6. Finalizing & Documenting Treatment</span>
@@ -931,7 +1075,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 14 – Technical approach */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="technical-approach" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl space-y-6 md:space-y-12">
             <header className="space-y-2">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Technical Approach</span>
@@ -985,7 +1129,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 15 – Feature selection & modeling */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="model-development" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl space-y-6 md:space-y-12">
             <header className="space-y-2">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Model Development</span>
@@ -1044,7 +1188,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 16 – Final UI collage */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="final-ui" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl space-y-4 md:space-y-6 text-center">
           <div className="overflow-hidden rounded-[16px] bg-white">
               <Image src={fullMockupImage} alt="Anticancer UI collage" className="h-auto w-full object-cover" />
@@ -1053,7 +1197,7 @@ export default function AnticancerPage() {
         </AnimatedSection>
 
         {/* Slide 17 – Color system */}
-        <AnimatedSection className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
+        <AnimatedSection id="color-system" className="px-6 pt-12 pb-12 md:pt-28 md:pb-32 text-[#232323] md:px-10 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-6xl space-y-6 md:space-y-12">
             <header className="space-y-2">
               <span className="text-xs uppercase tracking-[0.35em] text-[#4F5C88]">Design Guide</span>

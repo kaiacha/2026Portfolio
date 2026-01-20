@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { animate, motion, useMotionValue } from 'framer-motion'
-import mapBackground from '@/src/assets/MapBG.png'
+import mapBackground from '@/src/assets/MapBG-Dark.png'
 
 export type WeatherData = {
   city: string
@@ -185,22 +185,22 @@ function WeatherCard({ data, size }: { data: WeatherData; size: number }) {
     <section
       role="region"
       aria-label={`Weather in ${city}`}
-      className="relative flex h-full w-full flex-col justify-between rounded-[26px] px-4 py-4 text-white"
+      className="relative flex h-full w-full flex-col justify-between rounded-[26px] px-4 py-4 text-white opacity-95"
       style={{
-        background: 'linear-gradient(180deg, #08499D 0%, #5596D8 100%)',
+        background: 'linear-gradient(180deg, rgba(8, 73, 157, 0.7) 0%, rgba(85, 150, 216, 0.7) 100%)',
         height: `${size}px`,
       }}
     >
       <div className="flex items-center gap-4">
         <div className="flex flex-col text-left gap-2 ">
-          <span className="text-[16px] font-medium uppercase text-white/80">{city}</span>
-          <span className="text-[56px] font-light leading-none tracking-tight">
+          <span className="text-[16px] font-medium uppercase text-white/85">{city}</span>
+          <span className="text-[56px] font-light leading-none tracking-tight text-white/90">
             {Math.round(temperatureC)}°
           </span>
         </div>
       </div>
 
-      <div className="flex items-center gap-3 text-left text-sm font-medium text-white/90">
+      <div className="flex items-center gap-3 text-left text-sm font-medium text-white/85">
         <WeatherSunIcon />
         <div className="flex flex-col gap-1">
           <span>{condition}</span>
@@ -217,7 +217,7 @@ function CampusCard({ data, size }: { data: CampusData; size: number }) {
     <section
       role="region"
       aria-label="Campus"
-      className="relative flex h-full w-full flex-col justify-between overflow-hidden rounded-[24px] p-0 text-black"
+      className="relative flex h-full w-full flex-col justify-between overflow-hidden rounded-[24px] opacity-90 p-0 text-black"
       style={{
         height: `${size}px`,
       }}
@@ -237,9 +237,9 @@ function CampusCard({ data, size }: { data: CampusData; size: number }) {
       <div className="relative z-10 flex h-full w-full flex-col px-5 pt-6 pb-12">
         <div className="mt-auto flex flex-col items-start gap-3">
           <ContactPin logoUrl={logoUrl} />
-          <div className="flex flex-col gap-0.5 text-black">
+          <div className="flex flex-col gap-0.5 text-white">
             <span className="text-base font-semibold leading-tight">{title}</span>
-            {subtitle && <span className="text-xs text-black/85">{subtitle}</span>}
+            {subtitle && <span className="text-xs text-white/85">{subtitle}</span>}
           </div>
         </div>
       </div>

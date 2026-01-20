@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import HomeContent from '@/components/HomeContent'
-import GradientMesh from '@/components/GradientMesh'
 import CursorTrail from '@/components/CursorTrail'
 
 export const metadata: Metadata = {
@@ -39,10 +38,8 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-slate-950">
-      <GradientMesh />
+    <main className="relative min-h-screen bg-slate-950">
       <CursorTrail />
-
       <div className="relative z-10">
         <HomeContent />
       </div>
