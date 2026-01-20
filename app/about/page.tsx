@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <WindowPageLayout title="About">
+    <WindowPageLayout title="About" currentPage="home">
       <AboutContent />
     </WindowPageLayout>
   )

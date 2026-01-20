@@ -13,7 +13,7 @@ import GithubLogo from '@/src/assets/GithubLogo.png'
 import FigmaLogo from '@/src/assets/FigmaLogo.png'
 import JiraLogo from '@/src/assets/JiraLogo.svg'
 import NotionLogo from '@/src/assets/NotionLogo.png'
-import VSCodeLogo from '@/src/assets/VSCodeLogo.png'   
+import VSCodeLogo from '@/src/assets/VScodeLogo.png'   
 import IllustLogo from '@/src/assets/IllustLogo.png'
 
 const experiences = [
